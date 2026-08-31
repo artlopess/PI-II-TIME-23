@@ -26,3 +26,9 @@
 | Pedro Businari Kawamoto | 26007360 |
 
 ---
+
+## 📋 Sobre o projeto
+
+O sistema tem como objetivo simular uma ferramenta de gestão utilizada por equipes de tecnologia para organizar e acompanhar **demandas de desenvolvimento** — como tarefas, defeitos (bugs), melhorias e atividades de documentação — ao longo de um ou mais projetos de software.
+ 
+Cada demanda cadastrada no sistema possui informações como título, descrição, tipo, prioridade, status, projeto associado, responsável, datas de criação e atualização, além de um prazo de finalização. As demandas podem ser criadas, visualizadas, filtradas, atualizadas e canceladas, seguindo um fluxo de trabalho (workflow) que vai desde a abertura até a conclusão ou cancelamento.
