@@ -1,0 +1,125 @@
+/* Leonardo Antunes de Souza - Estilos da Tela de Login */
+
+body {
+  margin: 0;
+  min-height: 100vh; /* define a altura mínima que um elemento pode assumir. */
+  font-family: 'Inter', sans-serif;
+ 
+  /* Centraliza o card na tela, tanto na horizontal quanto na vertical */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+ 
+/* ===== CARD DE LOGIN ===== */
+.card {
+  width: 100%;
+  max-width: 360px;
+  background: white;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 10px;
+  padding: 36px 32px;
+}
+ 
+/* Logo/nome do sistema no topo do card */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+ 
+.logo-quadrado {
+  width: 30px;
+  height: 30px;
+  background: rgb(59, 59, 163);
+  border-radius: 7px;
+  color: white;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ 
+.logo-nome {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+}
+ 
+/* Título e subtítulo */
+.card h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  margin: 0 0 6px;
+}
+ 
+.card .subtitulo {
+  font-size: 14px;
+  color: rgb(0, 0, 0);
+  margin: 0 0 26px;
+}
+ 
+/* Cada campo (label + input) */
+.campo {
+  margin-bottom: 16px;
+}
+ 
+.campo label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+ 
+.campo input {
+  width: 95%;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  border: 1px solid rgb(8, 0, 0);
+  border-radius: 6px;
+  color: rgb(0, 0, 0);
+}
+ 
+/* Linha com "Lembrar-me" e "Esqueci a senha" lado a lado */
+.linha-opcoes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+ 
+.linha-opcoes a {
+  color: rgb(59, 59, 163);
+  text-decoration: none;  /* usada para adicionar ou remover sublinhados, sobrelinhas e riscados */
+}
+ 
+/* Botão de entrar */
+.botao-entrar {
+  width: 100%;
+  padding: 11px;
+  background: rgb(59, 59, 163);
+  color: white;
+  border: none; 
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+ 
+.botao-entrar:hover {
+  background: rgb(59, 59, 163);
+}
+ 
+/* Rodapé do card */
+.rodape {
+  margin-top: 22px;
+  font-size: 12px;
+  color: black;
+  text-align: center;
+}
+ 
