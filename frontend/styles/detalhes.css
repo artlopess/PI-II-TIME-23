@@ -1,0 +1,105 @@
+/* Pedro Businari kawamoto - Estilos da Tela de detalhes da demanda */
+body{margin: 0;
+  min-height: 100vh; /* define a altura mínima que um elemento pode assumir. */
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f6f9;
+ 
+  /* Centraliza o card na tela, tanto na horizontal quanto na vertical */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.card {
+    width: 100%;
+    max-width: 360px;
+    background: white;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    padding: 36px 32px;
+}
+
+/* Logo/nome do sistema no topo do card */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.logo-quadrado{
+    width: 30px;
+    height: 30px;
+    background: rgb(59, 59, 163);
+    border-radius: 7px;
+    color: white;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-nome {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+/* Título principal */
+.card h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  margin: 0 0 6px;
+}
+
+/* ===== ESTILIZAÇÃO DA TABELA ===== */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Remove as bordas duplas e limpa o estilo original */
+    margin-top: 15px;
+    margin-bottom: 16px;
+}
+
+table th {
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    border: 1px solid rgb(0, 0, 0);
+    text-align: left;
+    background-color: #f9f9f9; 
+    font-weight: 600;
+    width: 40%; /* Mantém o alinhamento da coluna da esquerda fixo */
+}
+
+table td {
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    border: 1px solid rgb(0, 0, 0);
+    text-align: left;
+    color: rgb(0, 0, 0);
+}
+
+/* ===== BOTÃO EXIBIR HISTÓRICO ===== */
+button {
+    width: 100%;
+    padding: 11px;
+    background: rgb(59, 59, 163); /* Mesmo azul do botão entrar */
+    color: white;
+    border: none; 
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Rodapé do card */
+.rodape {
+  margin-top: 22px;
+  font-size: 12px;
+  color: black;
+  text-align: center;
+}
