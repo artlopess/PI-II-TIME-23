@@ -1,0 +1,103 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 30px;
+  font-family: 'Inter', sans-serif;
+  background: #f2f2f2;
+}
+
+.card, .filtros, table {
+  background: white;
+  border: 1px solid #000;
+  border-radius: 10px;
+}
+
+.card {
+  width: 100%;
+  max-width: 360px;
+  padding: 36px 32px;
+  margin: auto;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-quadrado {
+  width: 30px;
+  height: 30px;
+  background: rgb(59,59,163);
+  color: white;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-nome {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+h1 {
+  color: #000;
+  font-size: 24px;
+}
+
+h2 {
+  color: #333;
+}
+
+.campo {
+  margin-bottom: 16px;
+}
+
+input, select {
+  padding: 10px;
+  margin-right: 10px;
+  font-family: 'Inter', sans-serif;
+  border: 1px solid #000;
+  border-radius: 6px;
+}
+
+button, .botao-entrar {
+  padding: 11px 15px;
+  background: rgb(59,59,163);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.filtros {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: rgb(59,59,163);
+  color: white;
+  padding: 12px;
+}
+
+td {
+  padding: 12px;
+  border: 1px solid #000;
+}
+
+tr:hover {
+  background: #eeeeee;
+}
+
+.rodape {
+  margin-top: 22px;
+  text-align: center;
+  font-size: 12px;
+}
