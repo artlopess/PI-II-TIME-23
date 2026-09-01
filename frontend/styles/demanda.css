@@ -1,0 +1,248 @@
+/* Arthur Lopes Santos Silva - Estilos das Telas de Cadastro e Edição de Demanda */
+
+body {
+  margin: 0;
+  min-height: 100vh; /* define a altura mínima que um elemento pode assumir. */
+  font-family: 'Inter', sans-serif;
+
+  /* Centraliza o card na tela, tanto na horizontal quanto na vertical */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* ===== CARD DO FORMULÁRIO ===== */
+/* Mais largo que o card de login porque o formulário tem muitos campos */
+.card {
+  width: 100%;
+  max-width: 640px;
+  background: white;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 10px;
+  padding: 36px 32px;
+}
+
+/* Logo/nome do sistema no topo do card */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.logo-quadrado {
+  width: 30px;
+  height: 30px;
+  background: rgb(59, 59, 163);
+  border-radius: 7px;
+  color: white;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-nome {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+/* Título e subtítulo */
+.card h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  margin: 0 0 6px;
+}
+
+.card .subtitulo {
+  font-size: 14px;
+  color: rgb(0, 0, 0);
+  margin: 0 0 26px;
+}
+
+/* ===== TABELA DO FORMULÁRIO ===== */
+/* A tabela organiza o formulário: nome do campo à esquerda, campo à direita */
+.formulario {
+  width: 100%;
+  border-collapse: collapse; /* remove as bordas duplas e limpa o estilo original */
+  margin-bottom: 8px;
+}
+
+.formulario th {
+  padding: 12px 12px 12px 0;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  vertical-align: top; /* alinha o nome do campo com o topo da caixa */
+  width: 32%;
+}
+
+.formulario td {
+  padding: 12px 0;
+  vertical-align: top;
+}
+
+/* ===== CAIXAS DOS CAMPOS ===== */
+/* A div abaixo tem a aparência de um campo preenchível */
+.caixa {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid rgb(8, 0, 0);
+  border-radius: 6px;
+  color: rgb(0, 0, 0);
+  background: white;
+}
+
+/* Caixa mais alta, usada na descrição */
+.caixa-alta {
+  min-height: 70px;
+}
+
+/* Caixa ainda sem preenchimento: o texto de exemplo fica em cinza */
+.caixa-vazia {
+  color: rgb(150, 150, 150);
+}
+
+/* Caixa bloqueada, como o status na tela de cadastro */
+.caixa-bloqueada {
+  background: rgb(244, 246, 249);
+  color: rgb(85, 85, 85);
+}
+
+/* Caixa com erro: borda vermelha */
+.caixa-erro {
+  border-color: rgb(179, 38, 30);
+}
+
+/* ===== LISTAS DE OPÇÕES ===== */
+/* Lista sem marcador, com os itens lado a lado */
+.opcoes {
+  list-style: none; /* tira as bolinhas da lista */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap; /* quebra a linha quando não couber */
+  gap: 8px;
+}
+
+.opcoes li {
+  padding: 7px 14px;
+  font-size: 13px;
+  border: 1px solid rgb(8, 0, 0);
+  border-radius: 6px;
+  background: white;
+}
+
+/* Opção que está selecionada no momento */
+.opcoes .escolhida {
+  background: rgb(59, 59, 163);
+  border-color: rgb(59, 59, 163);
+  color: white;
+  font-weight: 600;
+}
+
+/* ===== TEXTOS DE APOIO ===== */
+/* Explicação em cinza abaixo do campo */
+.dica {
+  font-size: 12px;
+  color: rgb(85, 85, 85);
+  margin: 6px 0 0;
+}
+
+/* Mensagem de erro em vermelho abaixo do campo */
+.erro {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(179, 38, 30);
+  margin: 6px 0 0;
+}
+
+/* ===== TABELA DAS DATAS AUTOMÁTICAS ===== */
+.registro {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 0;
+}
+
+.registro th {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid rgb(0, 0, 0);
+  text-align: left;
+  background-color: #f9f9f9;
+  font-weight: 600;
+  width: 40%; /* mantém o alinhamento da coluna da esquerda fixo */
+}
+
+.registro td {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid rgb(0, 0, 0);
+  text-align: left;
+  color: rgb(0, 0, 0);
+}
+
+/* ===== BOTÕES ===== */
+/* Os dois botões dividem a largura do card */
+.acoes {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* Botão de salvar */
+.botao-salvar {
+  flex: 1;
+  padding: 11px;
+  background: rgb(59, 59, 163);
+  color: white;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Botão de cancelar: mesma forma, aparência mais discreta */
+.botao-cancelar {
+  flex: 1;
+  padding: 11px;
+  background: white;
+  color: rgb(59, 59, 163);
+  border: 1px solid rgb(59, 59, 163);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Rodapé do card */
+.rodape {
+  margin-top: 22px;
+  font-size: 12px;
+  color: black;
+  text-align: center;
+}
+
+/* ===== TELAS PEQUENAS ===== */
+/* Abaixo de 560px o nome do campo fica em cima da caixa, e não ao lado */
+@media (max-width: 560px) {
+  .formulario th,
+  .formulario td {
+    display: block;
+    width: auto;
+    padding: 0;
+  }
+
+  .formulario th {
+    margin-bottom: 6px;
+  }
+
+  .formulario td {
+    margin-bottom: 16px;
+  }
+}

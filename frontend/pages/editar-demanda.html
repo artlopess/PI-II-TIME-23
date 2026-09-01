@@ -1,0 +1,136 @@
+<!-- Arthur Lopes Santos Silva - Tela de Edição de Demanda -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar demanda - Acompanhamento de Demandas</title>
+    <link rel="stylesheet" href="../styles/demanda.css">
+</head>
+<body>
+    <div class="card">
+
+    <!-- Logo do sistema -->
+    <div class="logo">
+      <div class="logo-quadrado">F</div>
+      <div class="logo-nome">Fluxo</div>
+    </div>
+
+    <h1>Editar demanda</h1>
+
+    <p class="subtitulo">
+        Alterações de status, responsável, prioridade e prazo ficam registradas no histórico.
+    </p>
+
+    <!-- Mesma tabela da tela de cadastro, agora com os dados preenchidos -->
+    <table class="formulario">
+
+        <tr>
+            <th>Título *</th>
+            <td>
+                <div class="caixa">Corrigir cálculo do frete para pedidos acima de R$ 200</div>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Descrição</th>
+            <td>
+                <div class="caixa caixa-alta">
+                    O frete continua sendo cobrado em pedidos acima de R$ 200, mesmo com a
+                    regra de frete grátis ativa. Para reproduzir: adicionar três itens que
+                    somem mais de R$ 200 e avançar até a tela de pagamento.
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Tipo *</th>
+            <td>
+                <!-- Nesta demanda o tipo escolhido é Defeito -->
+                <ul class="opcoes">
+                    <li>Tarefa</li>
+                    <li class="escolhida">Defeito</li>
+                    <li>Melhoria</li>
+                    <li>Documentação</li>
+                </ul>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Prioridade *</th>
+            <td>
+                <ul class="opcoes">
+                    <li>Crítica</li>
+                    <li class="escolhida">Alta</li>
+                    <li>Média</li>
+                    <li>Baixa</li>
+                </ul>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Projeto *</th>
+            <td>
+                <div class="caixa">App de Entregas</div>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Responsável</th>
+            <td>
+                <div class="caixa">Bruno Tavares</div>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Prazo de finalização</th>
+            <td>
+                <!-- Exemplo do erro devolvido pela API de feriados nacionais.
+                     A classe "caixa-erro" deixa a borda vermelha -->
+                <div class="caixa caixa-erro">07/09/2026</div>
+                <p class="erro">7 de setembro é feriado nacional. Escolha outra data.</p>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Status</th>
+            <td>
+                <!-- Na edição o status pode mudar, respeitando as transições permitidas.
+                     Concluída não aparece porque a demanda precisa passar por Em revisão -->
+                <ul class="opcoes">
+                    <li class="escolhida">Em andamento</li>
+                    <li>Em revisão</li>
+                    <li>Cancelada</li>
+                </ul>
+                <p class="dica">Só conclui depois de passar por Em revisão.</p>
+            </td>
+        </tr>
+
+    </table>
+
+    <!-- Datas preenchidas automaticamente pelo sistema -->
+    <table class="registro">
+        <tr>
+            <th>Data de criação</th>
+            <td>18/08/2026 09:12</td>
+        </tr>
+        <tr>
+            <th>Última atualização</th>
+            <td>24/08/2026 15:40</td>
+        </tr>
+    </table>
+
+    <!-- Botões de ação -->
+    <div class="acoes">
+      <div class="botao-cancelar">Cancelar</div>
+      <div class="botao-salvar">Salvar alterações</div>
+    </div>
+
+    <p class="rodape">
+        Sistema de Acompanhamento de Demandas de Desenvolvimento
+    </p>
+
+  </div>
+
+</body>
+</html>

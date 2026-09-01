@@ -1,0 +1,122 @@
+<!-- Arthur Lopes Santos Silva - Tela de Cadastro de Demanda -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova demanda - Acompanhamento de Demandas</title>
+    <link rel="stylesheet" href="../styles/demanda.css">
+</head>
+<body>
+    <div class="card">
+
+    <!-- Logo do sistema -->
+    <div class="logo">
+      <div class="logo-quadrado">F</div>
+      <div class="logo-nome">Fluxo</div>
+    </div>
+
+    <h1>Nova demanda</h1>
+
+    <p class="subtitulo">
+        Descreva a atividade e escolha o projeto. O responsável pode ser definido depois.
+    </p>
+
+    <!-- Tabela do formulário: à esquerda o nome do campo, à direita a caixa -->
+    <table class="formulario">
+
+        <tr>
+            <th>Título *</th>
+            <td>
+                <!-- Caixa vazia, mostrando um exemplo em cinza -->
+                <div class="caixa caixa-vazia">Ex.: Corrigir cálculo do frete no carrinho</div>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Descrição</th>
+            <td>
+                <!-- Caixa alta, para textos maiores -->
+                <div class="caixa caixa-alta caixa-vazia">
+                    Explique o que precisa ser feito ou como reproduzir o problema.
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Tipo *</th>
+            <td>
+                <!-- Lista com os quatro tipos previstos no documento de escopo.
+                     A opção escolhida recebe a classe "escolhida" -->
+                <ul class="opcoes">
+                    <li class="escolhida">Tarefa</li>
+                    <li>Defeito</li>
+                    <li>Melhoria</li>
+                    <li>Documentação</li>
+                </ul>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Prioridade *</th>
+            <td>
+                <!-- As quatro prioridades previstas no documento de escopo -->
+                <ul class="opcoes">
+                    <li>Crítica</li>
+                    <li>Alta</li>
+                    <li class="escolhida">Média</li>
+                    <li>Baixa</li>
+                </ul>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Projeto *</th>
+            <td>
+                <!-- Os projetos já vêm cadastrados no banco de dados -->
+                <div class="caixa caixa-vazia">Selecione um projeto</div>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Responsável</th>
+            <td>
+                <!-- Campo opcional: pode ficar em branco e ser atribuído depois -->
+                <div class="caixa caixa-vazia">Sem responsável por enquanto</div>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Prazo de finalização</th>
+            <td>
+                <div class="caixa caixa-vazia">dd/mm/aaaa</div>
+                <!-- A data será validada por uma API externa de feriados nacionais -->
+                <p class="dica">Prazos em feriado nacional não são aceitos.</p>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Status</th>
+            <td>
+                <!-- Toda demanda nasce com status Aberta, por isso a caixa fica bloqueada -->
+                <div class="caixa caixa-bloqueada">Aberta</div>
+                <p class="dica">Definido automaticamente na criação.</p>
+            </td>
+        </tr>
+
+    </table>
+
+    <!-- Botões de ação -->
+    <div class="acoes">
+      <div class="botao-cancelar">Cancelar</div>
+      <div class="botao-salvar">Salvar demanda</div>
+    </div>
+
+    <p class="rodape">
+        Sistema de Acompanhamento de Demandas de Desenvolvimento
+    </p>
+
+  </div>
+
+</body>
+</html>
