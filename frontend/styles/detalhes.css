@@ -1,23 +1,67 @@
 /* Pedro Businari kawamoto - Estilos da Tela de detalhes da demanda */
-body{margin: 0;
-  min-height: 100vh; /* define a altura mínima que um elemento pode assumir. */
+
+body {
+  margin: 0;
+  min-height: 100vh;
   font-family: 'Inter', sans-serif;
   background-color: #f4f6f9;
  
-  /* Centraliza o card na tela, tanto na horizontal quanto na vertical */
+  /* Centraliza o container principal na tela */
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
+  box-sizing: border-box;
 }
 
-.card {
+.dashboard-container {
+    display: flex;
+    flex-direction: row;      /* Garante o alinhamento horizontal (lado a lado) */
+    flex-wrap: wrap;          /* Permite quebrar linha apenas em telas de celular */
+    gap: 150px;                /* Distância exata entre os dois cards */
+    justify-content: center;  /* Centraliza a dupla na tela */
+    align-items: stretch;     /* Força os elementos a tentarem ocupar a mesma altura */
+    padding: 20px;
     width: 100%;
-    max-width: 360px;
+    max-width: 1250px;        /* Aumentado para acomodar os dois cards maiores lado a lado */
+    box-sizing: border-box;
+}
+
+/* Regras idênticas aplicadas a AMBOS os cards */
+.card {
+    flex: 1;
+    min-width: 320px;
+    max-width: 500px;         /* Aumentado de 360px para 500px para dar espaço à tabela e texto */
+    height: 620px;            /* ALTURA FIXA IGUAL PARA OS DOIS CARDS */
     background: white;
     border: 1px solid rgb(0, 0, 0);
     border-radius: 10px;
     padding: 36px 32px;
+    box-sizing: border-box;
+}
+
+/* Regra específica do CARD DE HISTÓRICO */
+.card.card-historico {
+    overflow-y: auto;         /* Permite rolar o card inteiro se o texto passar de 620px */
+}
+
+/* Título secundário dentro do histórico */
+.card.card-historico h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    margin: 0 0 15px 0;
+}
+
+/* Espaçamento da lista do histórico */
+.card.card-historico ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.card.card-historico li {
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 /* Logo/nome do sistema no topo do card */
@@ -28,7 +72,7 @@ body{margin: 0;
   margin-bottom: 28px;
 }
 
-.logo-quadrado{
+.logo-quadrado {
     width: 30px;
     height: 30px;
     background: rgb(59, 59, 163);
@@ -57,7 +101,7 @@ body{margin: 0;
 /* ===== ESTILIZAÇÃO DA TABELA ===== */
 table {
     width: 100%;
-    border-collapse: collapse; /* Remove as bordas duplas e limpa o estilo original */
+    border-collapse: collapse;
     margin-top: 15px;
     margin-bottom: 16px;
 }
@@ -70,7 +114,7 @@ table th {
     text-align: left;
     background-color: #f9f9f9; 
     font-weight: 600;
-    width: 40%; /* Mantém o alinhamento da coluna da esquerda fixo */
+    width: 40%;
 }
 
 table td {
@@ -82,19 +126,6 @@ table td {
     color: rgb(0, 0, 0);
 }
 
-/* ===== BOTÃO EXIBIR HISTÓRICO ===== */
-button {
-    width: 100%;
-    padding: 11px;
-    background: rgb(59, 59, 163); /* Mesmo azul do botão entrar */
-    color: white;
-    border: none; 
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-}
 
 /* Rodapé do card */
 .rodape {
