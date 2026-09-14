@@ -21,17 +21,22 @@
     <p class="subtitulo">
         Use suas credenciais para acessar o sistema.
     </p>
- 
+    
+    <!-- O <form> junta os campos e permite usar o evento "submit" no JS -->
+    <form id="form-login" novalidate>
+
     <!-- Campo de e-mail -->
     <div class="campo">
       <label for="email">E-mail</label>
       <input type="email" id="email" placeholder="seu.nome@empresa.com">
+      <p class="erro" id="erro-email"></p>
     </div>
  
     <!-- Campo de senha -->
     <div class="campo">
       <label for="senha">Senha</label>
       <input type="password" id="senha" placeholder="••••••••">
+      <p class="erro" id="erro-senha"></p>
     </div>
  
     <!-- Lembrar-me e esqueci a senha -->
@@ -42,15 +47,21 @@
       </label>
       <a href="#">Esqueci minha senha</a>
     </div>
+
+    <p class="erro erro-geral" id="erro-geral"></p>
  
     <!-- Botão -->
-    <button class="botao-entrar">Entrar</button>
+    <button type="submit" class="botao-entrar">Entrar</button>
+
+    </form>
  
     <p class="rodape">
         Sistema de Acompanhamento de Demandas de Desenvolvimento
     </p>
  
   </div>
+
+  <script src="../scripts/login.js"></script>
     
 </body>
 </html>

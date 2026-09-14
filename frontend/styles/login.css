@@ -83,6 +83,29 @@ body {
   border-radius: 6px;
   color: rgb(0, 0, 0);
 }
+
+.campo input.input-erro{
+  border-color: rgb(179, 38, 30);
+}
+
+/* Mensagens de Erro */
+
+.erro{
+  display: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgb(179, 38, 30);
+  margin: 6px 0 0;
+}
+
+.erro.mostrar{
+  display: block;
+}
+
+.erro-geral {
+  margin-bottom: 16px;
+  text-align: center;
+}
  
 /* Linha com "Lembrar-me" e "Esqueci a senha" lado a lado */
 .linha-opcoes {
