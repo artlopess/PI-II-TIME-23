@@ -22,101 +22,119 @@
         Descreva a atividade e escolha o projeto. O responsável pode ser definido depois.
     </p>
 
-    <!-- Tabela do formulário: à esquerda o nome do campo, à direita a caixa -->
-    <table class="formulario">
+    <!-- O onsubmit chama a validação antes de enviar o formulário.
+         Se a função devolver false, o envio é cancelado. -->
+    <form onsubmit="return validarFormulario()">
 
-        <tr>
-            <th>Título *</th>
-            <td>
-                <!-- Caixa vazia, mostrando um exemplo em cinza -->
-                <div class="caixa caixa-vazia">Ex.: Corrigir cálculo do frete no carrinho</div>
-            </td>
-        </tr>
+        <!-- Campo: título -->
+        <div class="campo">
+            <label for="titulo">Título *</label>
+            <input type="text" id="titulo" placeholder="Ex.: Corrigir cálculo do frete no carrinho">
+            <!-- A mensagem de erro deste campo aparece aqui -->
+            <p class="erro" id="erro-titulo"></p>
+        </div>
 
-        <tr>
-            <th>Descrição</th>
-            <td>
-                <!-- Caixa alta, para textos maiores -->
-                <div class="caixa caixa-alta caixa-vazia">
-                    Explique o que precisa ser feito ou como reproduzir o problema.
-                </div>
-            </td>
-        </tr>
+        <!-- Campo: descrição -->
+        <div class="campo">
+            <label for="descricao">Descrição *</label>
+            <textarea id="descricao" placeholder="Explique o que precisa ser feito ou como reproduzir o problema."></textarea>
+            <p class="erro" id="erro-descricao"></p>
+        </div>
 
-        <tr>
-            <th>Tipo *</th>
-            <td>
-                <!-- Lista com os quatro tipos previstos no documento de escopo.
-                     A opção escolhida recebe a classe "escolhida" -->
-                <ul class="opcoes">
-                    <li class="escolhida">Tarefa</li>
-                    <li>Defeito</li>
-                    <li>Melhoria</li>
-                    <li>Documentação</li>
-                </ul>
-            </td>
-        </tr>
+        <!-- Campos: tipo e prioridade, lado a lado -->
+        <div class="linha-dupla">
 
-        <tr>
-            <th>Prioridade *</th>
-            <td>
-                <!-- As quatro prioridades previstas no documento de escopo -->
-                <ul class="opcoes">
-                    <li>Crítica</li>
-                    <li>Alta</li>
-                    <li class="escolhida">Média</li>
-                    <li>Baixa</li>
-                </ul>
-            </td>
-        </tr>
+            <div class="campo">
+                <label for="tipo">Tipo *</label>
+                <select id="tipo">
+                    <option value="">Selecione</option>
+                    <option value="Tarefa">Tarefa</option>
+                    <option value="Defeito">Defeito</option>
+                    <option value="Melhoria">Melhoria</option>
+                    <option value="Documentacao">Documentação</option>
+                </select>
+                <p class="erro" id="erro-tipo"></p>
+            </div>
 
-        <tr>
-            <th>Projeto *</th>
-            <td>
+            <div class="campo">
+                <label for="prioridade">Prioridade *</label>
+                <select id="prioridade">
+                    <option value="">Selecione</option>
+                    <option value="Critica">Crítica</option>
+                    <option value="Alta">Alta</option>
+                    <option value="Media">Média</option>
+                    <option value="Baixa">Baixa</option>
+                </select>
+                <p class="erro" id="erro-prioridade"></p>
+            </div>
+
+        </div>
+
+        <!-- Campos: projeto e responsável, lado a lado -->
+        <div class="linha-dupla">
+
+            <div class="campo">
+                <label for="projeto">Projeto *</label>
                 <!-- Os projetos já vêm cadastrados no banco de dados -->
-                <div class="caixa caixa-vazia">Selecione um projeto</div>
-            </td>
-        </tr>
+                <select id="projeto">
+                    <option value="">Selecione um projeto</option>
+                    <option value="1">Portal do Aluno</option>
+                    <option value="2">App de Entregas</option>
+                    <option value="3">Sistema Financeiro</option>
+                </select>
+                <p class="erro" id="erro-projeto"></p>
+            </div>
 
-        <tr>
-            <th>Responsável</th>
-            <td>
+            <div class="campo">
+                <label for="responsavel">Responsável</label>
                 <!-- Campo opcional: pode ficar em branco e ser atribuído depois -->
-                <div class="caixa caixa-vazia">Sem responsável por enquanto</div>
-            </td>
-        </tr>
+                <select id="responsavel">
+                    <option value="">Sem responsável por enquanto</option>
+                    <option value="1">Ana Ribeiro</option>
+                    <option value="2">Bruno Tavares</option>
+                    <option value="3">Camila Duarte</option>
+                </select>
+            </div>
 
-        <tr>
-            <th>Prazo de finalização</th>
-            <td>
-                <div class="caixa caixa-vazia">dd/mm/aaaa</div>
-                <!-- A data será validada por uma API externa de feriados nacionais -->
-                <p class="dica">Prazos em feriado nacional não são aceitos.</p>
-            </td>
-        </tr>
+        </div>
 
-        <tr>
-            <th>Status</th>
-            <td>
-                <!-- Toda demanda nasce com status Aberta, por isso a caixa fica bloqueada -->
-                <div class="caixa caixa-bloqueada">Aberta</div>
+        <!-- Campos: prazo e status, lado a lado -->
+        <div class="linha-dupla">
+
+            <div class="campo">
+                <label for="prazo">Prazo de finalização</label>
+                <input type="date" id="prazo">
+                <p class="erro" id="erro-prazo"></p>
+            </div>
+
+            <div class="campo">
+                <label for="status-inicial">Status</label>
+                <!-- Toda demanda nasce com status Aberta, por isso o campo fica bloqueado -->
+                <input type="text" id="status-inicial" value="Aberta" disabled>
                 <p class="dica">Definido automaticamente na criação.</p>
-            </td>
-        </tr>
+            </div>
 
-    </table>
+        </div>
 
-    <!-- Botões de ação -->
-    <div class="acoes">
-      <div class="botao-cancelar">Cancelar</div>
-      <div class="botao-salvar">Salvar demanda</div>
-    </div>
+        <!-- Mensagem exibida quando todos os campos estão corretos -->
+        <p class="sucesso" id="mensagem-sucesso"></p>
+
+        <!-- Botões de ação -->
+        <div class="acoes">
+            <div class="botao-cancelar">Cancelar</div>
+            <button type="submit" class="botao-salvar">Salvar demanda</button>
+        </div>
+
+    </form>
 
     <p class="rodape">
         Sistema de Acompanhamento de Demandas de Desenvolvimento
     </p>
 
   </div>
+
+  <!-- O script fica no final para carregar depois que a página já existe -->
+  <script src="../scripts/demanda.js"></script>
 
 </body>
 </html>
