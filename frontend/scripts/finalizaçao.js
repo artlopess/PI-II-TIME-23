@@ -5,19 +5,39 @@ const observacao = document.getElementById("observacao");
 const mensagem = document.getElementById("mensagem");
 const contador = document.getElementById("contador");
 
-observacao.addEventListener("input", function() {
-    contador.innerText = observacao.value.length + "/200 caracteres";
+const LIMITE_CARACTERES = 200;
+
+observacao.addEventListener("input", function () {
+    const quantidade = observacao.value.length;
+
+    contador.innerText = `${quantidade}/${LIMITE_CARACTERES} caracteres`;
+
+    if (quantidade >= 180) {
+        contador.classList.add("limite");
+    } else {
+        contador.classList.remove("limite");
+    }
 });
 
-form.addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    mensagem.innerText = "";
-    mensagem.classList.remove("erro", "sucesso");
-
+function limparErros() {
     status.classList.remove("campo-erro");
     data.classList.remove("campo-erro");
     observacao.classList.remove("campo-erro");
+
+    mensagem.innerText = "";
+    mensagem.classList.remove("erro", "sucesso");
+}
+
+function mostrarErro(erros) {
+    mensagem.innerText = erros.join(" ");
+    mensagem.classList.add("erro");
+}
+
+form.addEventListener("submit", function (event) {
+
+    event.preventDefault();
+
+    limparErros();
 
     let erros = [];
 
@@ -27,34 +47,62 @@ form.addEventListener("submit", function(event) {
     }
 
     if (data.value === "") {
+
         erros.push("Informe a data de finalização.");
         data.classList.add("campo-erro");
+
+    } else {
+
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+        const dia = String(hoje.getDate()).padStart(2, "0");
+
+        const dataAtual = `${ano}-${mes}-${dia}`;
+
+        if (data.value > dataAtual) {
+            erros.push("A data não pode ser futura.");
+            data.classList.add("campo-erro");
+        }
     }
 
-    if (observacao.value.trim() === "") {
+    const textoObservacao = observacao.value.trim();
+
+    if (textoObservacao === "") {
+
         erros.push("Preencha a observação.");
         observacao.classList.add("campo-erro");
-    } else if (observacao.value.trim().length < 10) {
+
+    } else if (textoObservacao.length < 10) {
+
         erros.push("A observação deve ter pelo menos 10 caracteres.");
         observacao.classList.add("campo-erro");
-    }
 
-    let hoje = new Date().toISOString().split("T")[0];
+    } else if (textoObservacao.length > LIMITE_CARACTERES) {
 
-    if (data.value !== "" && data.value > hoje) {
-        erros.push("A data não pode ser futura.");
-        data.classList.add("campo-erro");
+        erros.push("A observação não pode ultrapassar 200 caracteres.");
+        observacao.classList.add("campo-erro");
     }
 
     if (erros.length > 0) {
-        mensagem.innerText = erros.join(" ");
-        mensagem.classList.add("erro");
+        mostrarErro(erros);
         return;
     }
 
-    mensagem.innerText = "Demanda " + status.value.toLowerCase() + " com sucesso!";
+    mensagem.innerText = "Demanda concluída com sucesso!";
     mensagem.classList.add("sucesso");
 
-    form.reset();
-    contador.innerText = "0/200 caracteres";
+    const botao = form.querySelector("button[type='submit']");
+    botao.disabled = true;
+
+    setTimeout(function () {
+
+        form.reset();
+
+        contador.innerText = "0/200 caracteres";
+        contador.classList.remove("limite");
+
+        botao.disabled = false;
+
+    }, 1500);
 });
