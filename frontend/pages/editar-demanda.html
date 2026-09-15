@@ -30,6 +30,7 @@
             <th>Título *</th>
             <td>
                 <input type="text" id="titulo" name="titulo" class="caixa" value="Corrigir calculo do frete para pedidos acima de R$ 200">
+                <p class="erro" id="erro-titulo"></p>
 
             </td>
         </tr>
@@ -37,7 +38,8 @@
         <tr>
             <th>Descrição</th>
             <td>
-                <textarea id="Descrição" name="Descrição" class="caixa caixa-alta">O frete continua sendo cobrado em pedidos acima de 200, mesmo com a regra de fretes gratis ativa. Para reproduzir: adicionar tres itens que somem mais de R$ 200 e avançar a tela de pagamento</textarea>
+                <textarea id="descricao" name="descricao" class="caixa caixa-alta">O frete continua sendo cobrado em pedidos acima de 200, mesmo com a regra de fretes gratis ativa. Para reproduzir: adicionar tres itens que somem mais de R$ 200 e avançar a tela de pagamento</textarea>
+                <p class="erro" id="erro-descricao"></p>
             </td>
         </tr>
 
@@ -68,14 +70,16 @@
         <tr>
             <th>Projeto *</th>
             <td>
-                <div class="caixa">App de Entregas</div>
+                <input type="text" id="projeto" name="projeto" class="caixa" value="">
+                <p class="erro" id="erro-projeto"></p>
             </td>
         </tr>
 
         <tr>
             <th>Responsável</th>
             <td>
-                <input type="text" id="Responsável" name="Responsável" class="caixa" value="Bruno Souza">
+                <input type="text" id="responsavel" name="responsavel" class="caixa" value="Bruno Souza">
+                <p class="erro" id="erro-responsavel"></p>
             </td>
         </tr>
 
