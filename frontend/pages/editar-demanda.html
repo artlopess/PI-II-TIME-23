@@ -21,6 +21,7 @@
     <p class="subtitulo">
         Alterações de status, responsável, prioridade e prazo ficam registradas no histórico.
     </p>
+    <form id="form-editar-demanda" novalidate>
 
     <!-- Mesma tabela da tela de cadastro, agora com os dados preenchidos -->
     <table class="formulario">
@@ -28,43 +29,39 @@
         <tr>
             <th>Título *</th>
             <td>
-                <div class="caixa">Corrigir cálculo do frete para pedidos acima de R$ 200</div>
+                <input type="text" id="titulo" name="titulo" class="caixa" value="Corrigir calculo do frete para pedidos acima de R$ 200">
+
             </td>
         </tr>
 
         <tr>
             <th>Descrição</th>
             <td>
-                <div class="caixa caixa-alta">
-                    O frete continua sendo cobrado em pedidos acima de R$ 200, mesmo com a
-                    regra de frete grátis ativa. Para reproduzir: adicionar três itens que
-                    somem mais de R$ 200 e avançar até a tela de pagamento.
-                </div>
+                <textarea id="Descrição" name="Descrição" class="caixa caixa-alta">O frete continua sendo cobrado em pedidos acima de 200, mesmo com a regra de fretes gratis ativa. Para reproduzir: adicionar tres itens que somem mais de R$ 200 e avançar a tela de pagamento</textarea>
             </td>
         </tr>
 
         <tr>
             <th>Tipo *</th>
             <td>
-                <!-- Nesta demanda o tipo escolhido é Defeito -->
-                <ul class="opcoes">
-                    <li>Tarefa</li>
-                    <li class="escolhida">Defeito</li>
-                    <li>Melhoria</li>
-                    <li>Documentação</li>
-                </ul>
+               <select id="tipo" name="tipo" class="opcoes">
+                <option value="tarefa">Tarefa</option>
+                <option value="defeito">Defeito</option>
+                <option value="melhoria">Melhoria</option>
+                <option value="documentacao">Documentação</option>
+               </select>
             </td>
         </tr>
 
         <tr>
             <th>Prioridade *</th>
             <td>
-                <ul class="opcoes">
-                    <li>Crítica</li>
-                    <li class="escolhida">Alta</li>
-                    <li>Média</li>
-                    <li>Baixa</li>
-                </ul>
+                <select id="prioridade" name="prioridade" class="opcoes">
+                    <option value="critica">Critica</option>
+                    <option value="alta">Alta</option>
+                    <option value="media">Média</option>
+                    <option value="baixa">Baixa</option>
+                </select>
             </td>
         </tr>
 
@@ -78,7 +75,7 @@
         <tr>
             <th>Responsável</th>
             <td>
-                <div class="caixa">Bruno Tavares</div>
+                <input type="text" id="Responsável" name="Responsável" class="caixa" value="Bruno Souza">
             </td>
         </tr>
 
@@ -87,8 +84,8 @@
             <td>
                 <!-- Exemplo do erro devolvido pela API de feriados nacionais.
                      A classe "caixa-erro" deixa a borda vermelha -->
-                <div class="caixa caixa-erro">07/09/2026</div>
-                <p class="erro">7 de setembro é feriado nacional. Escolha outra data.</p>
+                <input type="date" id="prazo" name="prazo" class="caixa" value="2026-09-07">
+                <p class="erro" id="erro-prazo"></p>
             </td>
         </tr>
 
@@ -97,12 +94,13 @@
             <td>
                 <!-- Na edição o status pode mudar, respeitando as transições permitidas.
                      Concluída não aparece porque a demanda precisa passar por Em revisão -->
-                <ul class="opcoes">
-                    <li class="escolhida">Em andamento</li>
-                    <li>Em revisão</li>
-                    <li>Cancelada</li>
-                </ul>
+                <select id="status" name="status" class="opcoes">
+                    <option value="em_andamento">Em andamento</option>
+                    <option value="em_revisao">Em revisão</option>
+                    <option value="cancelada">Cancelada</option>
+                </select>
                 <p class="dica">Só conclui depois de passar por Em revisão.</p>
+                <p class="erro" id="erro-status"></p>
             </td>
         </tr>
 
@@ -122,15 +120,16 @@
 
     <!-- Botões de ação -->
     <div class="acoes">
-      <div class="botao-cancelar">Cancelar</div>
-      <div class="botao-salvar">Salvar alterações</div>
+      <button type="button" class="botao-cancelar">Cancelar</button>
+      <button type="submit" class="botao-salvar">Salvar Alterações</button>
     </div>
+    </form>
 
     <p class="rodape">
         Sistema de Acompanhamento de Demandas de Desenvolvimento
     </p>
 
   </div>
-
+  <script src="../scripts/status.js"></script>
 </body>
 </html>
