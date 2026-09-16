@@ -76,6 +76,7 @@ body {
  
 .campo input {
   width: 95%;
+  box-sizing: border-box;
   padding: 10px 12px;
   font-size: 14px;
   font-family: 'Inter', sans-serif;
@@ -145,4 +146,112 @@ body {
   color: black;
   text-align: center;
 }
- 
+
+/* Wrapper do campo de senha, para posicionar o olhinho dentro do input */
+.wrapper-senha {
+  position: relative;
+  width: 100%;
+}
+
+.wrapper-senha input {
+  padding-right: 44px; /* espaço pro botão não cobrir o texto digitado */
+}
+
+.botao-olho {
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  /* Reseta os estilos padrão do <button> */
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  line-height: 1;
+
+  /* Fixa um tamanho exato pra caixa do botão, e centraliza o emoji dentro dela */
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+  cursor: pointer;
+  color: rgb(85, 85, 85);
+}
+
+/* Lista de regras da senha */
+.regras-senha {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  font-size: 12px;
+}
+
+.regras-senha li {
+  color: rgb(150, 150, 150);
+  margin-bottom: 4px;
+  padding-left: 18px;
+  position: relative;
+}
+
+.regras-senha li::before {
+  content: "○";
+  position: absolute;
+  left: 0;
+}
+
+.regras-senha li.valida {
+  color: rgb(59, 59, 163);
+  font-weight: 600;
+}
+
+.regras-senha li.valida::before {
+  content: "✓";
+}
+
+/* Barra de força da senha */
+.forca-senha {
+  height: 4px;
+  border-radius: 2px;
+  background: rgb(230, 230, 230);
+  margin: 8px 0 10px;
+  overflow: hidden;
+}
+
+.forca-senha-preenchimento {
+  height: 100%;
+  width: 0%;
+  border-radius: 2px;
+  background: rgb(229, 72, 77); /* vermelho por padrão */
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Lista de regras com transição suave */
+.regras-senha li {
+  color: rgb(150, 150, 150);
+  margin-bottom: 4px;
+  padding-left: 18px;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.regras-senha li.valida {
+  color: rgb(59, 59, 163);
+  font-weight: 600;
+  text-decoration: line-through;
+  text-decoration-color: rgba(59, 59, 163, 0.4);
+}
+
+.regras-senha li::before {
+  content: "○";
+  position: absolute;
+  left: 0;
+  transition: content 0.2s ease;
+}
+
+.regras-senha li.valida::before {
+  content: "✓";
+}

@@ -31,11 +31,25 @@
       <input type="email" id="email" placeholder="seu.nome@empresa.com">
       <p class="erro" id="erro-email"></p>
     </div>
- 
+
     <!-- Campo de senha -->
     <div class="campo">
       <label for="senha">Senha</label>
-      <input type="password" id="senha" placeholder="••••••••">
+      <div class="wrapper-senha">
+        <input type="password" id="senha" placeholder="••••••••">
+        <button type="button" class="botao-olho" id="botao-olho" aria-label="Mostrar senha">👁</button>
+      </div>
+      <div class="forca-senha">
+        <div class="forca-senha-preenchimento" id="forca-senha-preenchimento"></div>
+      </div>
+      <ul class="regras-senha" id="regras-senha">
+        <li id="regra-tamanho">Mínimo de 9 caracteres</li>
+        <li id="regra-maiuscula">Pelo menos 1 letra maiúscula</li>
+        <li id="regra-minuscula">Pelo menos 1 letra minúscula</li>
+        <li id="regra-numero">Pelo menos 1 número</li>
+        <li id="regra-especial">Pelo menos 1 caractere especial</li>
+      </ul>
+
       <p class="erro" id="erro-senha"></p>
     </div>
  

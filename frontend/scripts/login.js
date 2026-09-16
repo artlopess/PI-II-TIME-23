@@ -1,6 +1,6 @@
 // Leonardo Antunes de Souza - Validações da Tela de Login
 
-// Regra de senha usada aqui: mínimo de 8 caracteres.
+// Regra de senha usada aqui: mínimo de 9 caracteres.
 // - Mínimo de 9 caracteres
 // - Pelo menos 1 letra maiúscula
 // - Pelo menos 1 letra minúscula
@@ -16,6 +16,7 @@ const campoSenha = document.getElementById('senha');
 const erroEmail = document.getElementById('erro-email');
 const erroSenha = document.getElementById('erro-senha');
 const erroGeral = document.getElementById('erro-geral');
+const botaoOlho = document.getElementById('botao-olho');
 
 // Funções de validação
 function emailFoiPreenchido(){
@@ -148,5 +149,55 @@ form.addEventListener('submit', function (evento) {
   } else {
     erroGeral.textContent = 'Usuário ou senha inválidos.';
     erroGeral.classList.add('mostrar');
+  }
+});
+
+// Mostrar/esconder senha
+botaoOlho.addEventListener('click', function () {
+  const escondida = campoSenha.type === 'password';
+  campoSenha.type = escondida ? 'text' : 'password';
+  botaoOlho.textContent = escondida ? '🙈' : '👁';
+  botaoOlho.setAttribute('aria-label', escondida ? 'Esconder senha' : 'Mostrar senha');
+});
+
+// Atualiza a lista de regras a cada tecla digitada,
+// reaproveitando as mesmas funções usadas na validação do envio
+campoSenha.addEventListener('input', function () {
+  document.getElementById('regra-tamanho').classList.toggle('valida', senhaTemTamanhoMinimo());
+  document.getElementById('regra-maiuscula').classList.toggle('valida', senhaTemMaiuscula());
+  document.getElementById('regra-minuscula').classList.toggle('valida', senhaTemMinuscula());
+  document.getElementById('regra-numero').classList.toggle('valida', senhaTemNumero());
+  document.getElementById('regra-especial').classList.toggle('valida', senhaTemCaractereEspecial());
+});
+
+// Atualiza a lista de regras e a barra de força a cada tecla digitada,
+// reaproveitando as mesmas funções usadas na validação do envio
+campoSenha.addEventListener('input', function () {
+  document.getElementById('regra-tamanho').classList.toggle('valida', senhaTemTamanhoMinimo());
+  document.getElementById('regra-maiuscula').classList.toggle('valida', senhaTemMaiuscula());
+  document.getElementById('regra-minuscula').classList.toggle('valida', senhaTemMinuscula());
+  document.getElementById('regra-numero').classList.toggle('valida', senhaTemNumero());
+  document.getElementById('regra-especial').classList.toggle('valida', senhaTemCaractereEspecial());
+
+  // Calcula quantas regras foram cumpridas e atualiza a barra de força
+  const totalRegras = 5;
+  const regrasCumpridas = [
+    senhaTemTamanhoMinimo(),
+    senhaTemMaiuscula(),
+    senhaTemMinuscula(),
+    senhaTemNumero(),
+    senhaTemCaractereEspecial()
+  ].filter(Boolean).length;
+
+  const barra = document.getElementById('forca-senha-preenchimento');
+  const porcentagem = (regrasCumpridas / totalRegras) * 100;
+  barra.style.width = porcentagem + '%';
+
+  if (porcentagem <= 40) {
+    barra.style.backgroundColor = 'rgb(229, 72, 77)'; // vermelho
+  } else if (porcentagem <= 80) {
+    barra.style.backgroundColor = 'rgb(224, 185, 78)'; // amarelo
+  } else {
+    barra.style.backgroundColor = 'rgb(59, 59, 163)'; // roxo do sistema
   }
 });
