@@ -21,112 +21,122 @@
     <p class="subtitulo">
         Alterações de status, responsável, prioridade e prazo ficam registradas no histórico.
     </p>
-    <form id="form-editar-demanda" novalidate>
 
-    <!-- Mesma tabela da tela de cadastro, agora com os dados preenchidos -->
-    <table class="formulario">
+    <!-- Usa a mesma validação da tela de cadastro -->
+    <form onsubmit="return validarFormulario()">
 
-        <tr>
-            <th>Título *</th>
-            <td>
-                <input type="text" id="titulo" name="titulo" class="caixa" value="Corrigir calculo do frete para pedidos acima de R$ 200">
-                <p class="erro" id="erro-titulo"></p>
+        <!-- Campo: título, já preenchido -->
+        <div class="campo">
+            <label for="titulo">Título *</label>
+            <input type="text" id="titulo" value="Corrigir cálculo do frete para pedidos acima de R$ 200">
+            <p class="erro" id="erro-titulo"></p>
+        </div>
 
-            </td>
-        </tr>
+        <!-- Campo: descrição, já preenchida -->
+        <div class="campo">
+            <label for="descricao">Descrição *</label>
+            <textarea id="descricao">O frete continua sendo cobrado em pedidos acima de R$ 200, mesmo com a regra de frete grátis ativa. Para reproduzir: adicionar três itens que somem mais de R$ 200 e avançar até a tela de pagamento.</textarea>
+            <p class="erro" id="erro-descricao"></p>
+        </div>
 
-        <tr>
-            <th>Descrição</th>
-            <td>
-                <textarea id="descricao" name="descricao" class="caixa caixa-alta">O frete continua sendo cobrado em pedidos acima de 200, mesmo com a regra de fretes gratis ativa. Para reproduzir: adicionar tres itens que somem mais de R$ 200 e avançar a tela de pagamento</textarea>
-                <p class="erro" id="erro-descricao"></p>
-            </td>
-        </tr>
+        <div class="linha-dupla">
 
-        <tr>
-            <th>Tipo *</th>
-            <td>
-               <select id="tipo" name="tipo" class="opcoes">
-                <option value="tarefa">Tarefa</option>
-                <option value="defeito">Defeito</option>
-                <option value="melhoria">Melhoria</option>
-                <option value="documentacao">Documentação</option>
-               </select>
-            </td>
-        </tr>
-
-        <tr>
-            <th>Prioridade *</th>
-            <td>
-                <select id="prioridade" name="prioridade" class="opcoes">
-                    <option value="critica">Critica</option>
-                    <option value="alta">Alta</option>
-                    <option value="media">Média</option>
-                    <option value="baixa">Baixa</option>
+            <div class="campo">
+                <label for="tipo">Tipo *</label>
+                <select id="tipo">
+                    <option value="">Selecione</option>
+                    <option value="Tarefa">Tarefa</option>
+                    <option value="Defeito" selected>Defeito</option>
+                    <option value="Melhoria">Melhoria</option>
+                    <option value="Documentacao">Documentação</option>
                 </select>
-            </td>
-        </tr>
+                <p class="erro" id="erro-tipo"></p>
+            </div>
 
-        <tr>
-            <th>Projeto *</th>
-            <td>
-                <input type="text" id="projeto" name="projeto" class="caixa" value="">
+            <div class="campo">
+                <label for="prioridade">Prioridade *</label>
+                <select id="prioridade">
+                    <option value="">Selecione</option>
+                    <option value="Critica">Crítica</option>
+                    <option value="Alta" selected>Alta</option>
+                    <option value="Media">Média</option>
+                    <option value="Baixa">Baixa</option>
+                </select>
+                <p class="erro" id="erro-prioridade"></p>
+            </div>
+
+        </div>
+
+        <div class="linha-dupla">
+
+            <div class="campo">
+                <label for="projeto">Projeto *</label>
+                <select id="projeto">
+                    <option value="">Selecione um projeto</option>
+                    <option value="1">Portal do Aluno</option>
+                    <option value="2" selected>App de Entregas</option>
+                    <option value="3">Sistema Financeiro</option>
+                </select>
                 <p class="erro" id="erro-projeto"></p>
-            </td>
-        </tr>
+            </div>
 
-        <tr>
-            <th>Responsável</th>
-            <td>
-                <input type="text" id="responsavel" name="responsavel" class="caixa" value="Bruno Souza">
-                <p class="erro" id="erro-responsavel"></p>
-            </td>
-        </tr>
+            <div class="campo">
+                <label for="responsavel">Responsável</label>
+                <select id="responsavel">
+                    <option value="">Sem responsável por enquanto</option>
+                    <option value="1">Ana Ribeiro</option>
+                    <option value="2" selected>Bruno Tavares</option>
+                    <option value="3">Camila Duarte</option>
+                </select>
+            </div>
 
-        <tr>
-            <th>Prazo de finalização</th>
-            <td>
-                <!-- Exemplo do erro devolvido pela API de feriados nacionais.
-                     A classe "caixa-erro" deixa a borda vermelha -->
-                <input type="date" id="prazo" name="prazo" class="caixa" value="2026-09-07">
+        </div>
+
+        <div class="linha-dupla">
+
+            <div class="campo">
+                <label for="prazo">Prazo de finalização</label>
+                <input type="date" id="prazo" value="2026-10-15">
+                <p class="dica">A checagem de feriado será feita por API em etapa posterior.</p>
                 <p class="erro" id="erro-prazo"></p>
-            </td>
-        </tr>
+            </div>
 
-        <tr>
-            <th>Status</th>
-            <td>
+            <div class="campo">
+                <label for="status">Status *</label>
                 <!-- Na edição o status pode mudar, respeitando as transições permitidas.
                      Concluída não aparece porque a demanda precisa passar por Em revisão -->
-                <select id="status" name="status" class="opcoes">
-                    <option value="em_andamento">Em andamento</option>
-                    <option value="em_revisao">Em revisão</option>
-                    <option value="cancelada">Cancelada</option>
+                <select id="status">
+                    <option value="">Selecione</option>
+                    <option value="EmAndamento" selected>Em andamento</option>
+                    <option value="EmRevisao">Em revisão</option>
+                    <option value="Cancelada">Cancelada</option>
                 </select>
-                <p class="dica">Só conclui depois de passar por Em revisão.</p>
                 <p class="erro" id="erro-status"></p>
-            </td>
-        </tr>
+            </div>
 
-    </table>
+        </div>
 
-    <!-- Datas preenchidas automaticamente pelo sistema -->
-    <table class="registro">
-        <tr>
-            <th>Data de criação</th>
-            <td>18/08/2026 09:12</td>
-        </tr>
-        <tr>
-            <th>Última atualização</th>
-            <td>24/08/2026 15:40</td>
-        </tr>
-    </table>
+        <!-- Datas preenchidas automaticamente pelo sistema -->
+        <table class="registro">
+            <tr>
+                <th>Data de criação</th>
+                <td>18/08/2026 09:12</td>
+            </tr>
+            <tr>
+                <th>Última atualização</th>
+                <td>24/08/2026 15:40</td>
+            </tr>
+        </table>
 
-    <!-- Botões de ação -->
-    <div class="acoes">
-      <button type="button" class="botao-cancelar">Cancelar</button>
-      <button type="submit" class="botao-salvar">Salvar Alterações</button>
-    </div>
+        <!-- Mensagem exibida quando todos os campos estão corretos -->
+        <p class="sucesso" id="mensagem-sucesso"></p>
+
+        <!-- Botões de ação -->
+        <div class="acoes">
+            <div class="botao-cancelar">Cancelar</div>
+            <button type="submit" class="botao-salvar">Salvar alterações</button>
+        </div>
+
     </form>
 
     <p class="rodape">
@@ -134,6 +144,9 @@
     </p>
 
   </div>
-  <script src="../scripts/status.js"></script>
+
+  <!-- O script fica no final para carregar depois que a página já existe -->
+  <script src="../scripts/demanda.js"></script>
+
 </body>
 </html>
