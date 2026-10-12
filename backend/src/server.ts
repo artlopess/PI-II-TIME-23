@@ -2,7 +2,8 @@
 
 import express from 'express';
 import rotasUsuarios from './rotas/usuarios';
-import rotasdetalhes from './rotas/detalhes'; 
+import rotasdetalhes from './rotas/detalhes';
+import rotasDashboard from './rotas/dashboard'; // Gabriel Augusto Jorge - rota do dashboard
 
 const app = express();
 app.use(express.json()); // sem isso o req.body vem vazio
@@ -12,6 +13,9 @@ app.use(rotasUsuarios);
 
 // Liga as rotas de detalhes e comentários do Pedro
 app.use(rotasdetalhes);
+
+// Liga a rota do dashboard do Gabriel
+app.use(rotasDashboard);
 
 // Porta onde o servidor vai rodar
 const PORTA = 3000;
