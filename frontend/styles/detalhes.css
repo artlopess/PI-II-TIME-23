@@ -1,67 +1,41 @@
-/* Pedro Businari kawamoto - Estilos da Tela de detalhes da demanda */
+/* Pedro Businari Kawamoto - Estilos da Tela de detalhes da demanda */
 
 body {
   margin: 0;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
   background-color: #f4f6f9;
- 
+
   /* Centraliza o container principal na tela */
   display: flex;
-  align-items: center;
+  align-items: flex-start;   /* topo da tela: a página pode crescer e rolar */
   justify-content: center;
   padding: 24px;
   box-sizing: border-box;
 }
 
+/* Cards empilhados e centralizados: os detalhes ficam em destaque */
 .dashboard-container {
     display: flex;
-    flex-direction: row;      /* Garante o alinhamento horizontal (lado a lado) */
-    flex-wrap: wrap;          /* Permite quebrar linha apenas em telas de celular */
-    gap: 150px;                /* Distância exata entre os dois cards */
-    justify-content: center;  /* Centraliza a dupla na tela */
-    align-items: stretch;     /* Força os elementos a tentarem ocupar a mesma altura */
-    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
     width: 100%;
-    max-width: 1250px;        /* Aumentado para acomodar os dois cards maiores lado a lado */
+    max-width: 760px;
+    padding: 20px;
     box-sizing: border-box;
 }
 
-/* Regras idênticas aplicadas a AMBOS os cards */
+/* Regras aplicadas a todos os cards */
 .card {
-    flex: 1;
-    min-width: 320px;
-    max-width: 500px;         /* Aumentado de 360px para 500px para dar espaço à tabela e texto */
-    height: 620px;            /* ALTURA FIXA IGUAL PARA OS DOIS CARDS */
+    width: 100%;
+    max-width: 700px;
+    height: auto;             /* cresce conforme o conteúdo (ex.: histórico aberto) */
     background: white;
     border: 1px solid rgb(0, 0, 0);
     border-radius: 10px;
     padding: 36px 32px;
     box-sizing: border-box;
-}
-
-/* Regra específica do CARD DE HISTÓRICO */
-.card.card-historico {
-    overflow-y: auto;         /* Permite rolar o card inteiro se o texto passar de 620px */
-}
-
-/* Título secundário dentro do histórico */
-.card.card-historico h2 {
-    font-family: 'Inter', sans-serif;
-    font-size: 24px;
-    margin: 0 0 15px 0;
-}
-
-/* Espaçamento da lista do histórico */
-.card.card-historico ul {
-    margin: 0;
-    padding-left: 20px;
-}
-
-.card.card-historico li {
-    margin-bottom: 12px;
-    font-size: 14px;
-    line-height: 1.5;
 }
 
 /* Logo/nome do sistema no topo do card */
@@ -112,7 +86,7 @@ table th {
     font-family: 'Inter', sans-serif;
     border: 1px solid rgb(0, 0, 0);
     text-align: left;
-    background-color: #f9f9f9; 
+    background-color: #f9f9f9;
     font-weight: 600;
     width: 40%;
 }
@@ -126,6 +100,51 @@ table td {
     color: rgb(0, 0, 0);
 }
 
+/* ===== HISTÓRICO ESCONDIDO (<details>) ===== */
+.historico {
+    margin-top: 4px;
+}
+
+/* O <summary> é o botão: estilizado como botão e sem a setinha padrão */
+.historico summary {
+    display: inline-block;
+    padding: 10px 20px;
+    background: rgb(59, 59, 163);
+    color: white;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    list-style: none;          /* remove o marcador (Firefox) */
+}
+
+.historico summary::-webkit-details-marker {
+    display: none;             /* remove o marcador (Chrome/Edge) */
+}
+
+/* Seta que indica se está fechado ou aberto */
+.historico summary::after {
+    content: " ▾";
+}
+
+.historico[open] summary::after {
+    content: " ▴";
+}
+
+/* Lista do histórico: rola dentro do card se ficar longa */
+.historico ul {
+    margin: 14px 0 0 0;
+    padding-left: 20px;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.historico li {
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+}
 
 /* Rodapé do card */
 .rodape {
@@ -133,4 +152,60 @@ table td {
   font-size: 12px;
   color: black;
   text-align: center;
+}
+
+/* ===== ERRO RETORNADO PELA API ===== */
+.erro {
+    width: 100%;
+    max-width: 700px;
+    background: #fdecea;
+    border: 1px solid #c0392b;
+    color: #c0392b;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* O atributo [hidden] perde para o display do .erro se não for reforçado */
+.erro[hidden] {
+    display: none;
+}
+
+/* ===== CARD DE COMENTÁRIOS ===== */
+.card.card-comentarios h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    margin: 0 0 15px 0;
+}
+
+.card.card-comentarios ul {
+    margin: 0 0 16px 0;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.card.card-comentarios textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px 12px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.card.card-comentarios button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: rgb(59, 59, 163);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
 }
