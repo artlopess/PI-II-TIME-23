@@ -1,23 +1,22 @@
-// Leonardo Antunes de Souza - Servidor básico do backend
+// Leonardo Antunes de Souza - Servidor do backend
 
 import express from 'express';
-import rotasUsuarios from './rotas/usuarios';
+import cors from 'cors';
+import rotasAutenticacao from './rotas/autenticacao';
 
 const app = express();
-app.use(express.json()); // sem isso o req.body vem vazio
-
-// Liga as rotas de login e usuários
-app.use(rotasUsuarios);
-
-// Porta onde o servidor vai rodar
 const PORTA = 3000;
 
-// Resposta de acesso
+app.use(cors());          // permite que o HTML chame a API
+app.use(express.json());  // permite ler o JSON enviado no body
+
 app.get('/', (req, res) => {
   res.send('Servidor do Fluxo funcionando!');
 });
 
-// Liga o servidor
+// Rotas de cada integrante entram aqui
+app.use(rotasAutenticacao);
+
 app.listen(PORTA, () => {
   console.log('Servidor rodando em http://localhost:' + PORTA);
 });

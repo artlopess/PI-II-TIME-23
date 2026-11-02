@@ -18,6 +18,7 @@ const erroSenha = document.getElementById('erro-senha');
 const erroGeral = document.getElementById('erro-geral');
 const botaoOlho = document.getElementById('botao-olho');
 
+
 // Funções de validação
 function emailFoiPreenchido(){
   // .trim() remove espaços em branco do começo/fim,
@@ -120,6 +121,48 @@ function validarSenha(){
     return true;
 }
 
+// Mostra uma mensagem de erro geral abaixo dos campos
+function mostrarErroGeral(mensagem) {
+  erroGeral.textContent = mensagem;
+  erroGeral.classList.add('mostrar');
+}
+
+// Envia e-mail e senha para a API e guarda o token se o login der certo
+async function enviarLogin(email, senha) {
+  try {
+    // 1. Faz a requisição POST /login, igual ao que você fez no Thunder Client
+    const resposta = await fetch(`${URL_API}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, senha })
+    });
+
+    // 2. Lê o JSON que a API devolveu
+    const dados = await resposta.json();
+
+    // 3. Se o status não for 2xx (400, 401...), mostra o erro da API na tela
+    if (!resposta.ok) {
+      mostrarErroGeral(dados.erro);
+      return;
+    }
+
+    // 4. Login ok: guarda o token e o usuário no navegador.
+    //    "Lembrar-me" marcado -> localStorage (continua após fechar o navegador)
+    //    "Lembrar-me" desmarcado -> sessionStorage (some ao fechar a aba)
+    const lembrar = document.getElementById('lembrar').checked;
+    const armazenamento = lembrar ? localStorage : sessionStorage;
+    armazenamento.setItem('token', dados.token);
+    armazenamento.setItem('usuario', JSON.stringify(dados.usuario));
+
+    // 5. Vai para a próxima tela
+    window.location.href = 'dashboard.html';
+
+  } catch (erro) {
+    // Cai aqui se o servidor estiver desligado ou a rede falhar
+    mostrarErroGeral('Não foi possível conectar ao servidor.');
+  }
+}
+
 // Quando o formulário é enviado:
 form.addEventListener('submit', function (evento) {
   // Impede o navegador de recarregar a página, que é o comportamento
@@ -137,20 +180,9 @@ form.addEventListener('submit', function (evento) {
     return;
   }
 
-  const emailDigitado = campoEmail.value.trim();
-  const senhaDigitada = campoSenha.value;
- 
-  // Isso vai serr removido assim que o back-end de autenticação existir(teste).
-  const emailDeTeste = 'usuario@exemplo.com';
-  const senhaDeTeste = 'senha1234';
- 
-  if (emailDigitado === emailDeTeste && senhaDigitada === senhaDeTeste) {
-    alert('Login realizado com sucesso! (simulação — ainda sem back-end)');
-  } else {
-    erroGeral.textContent = 'Usuário ou senha inválidos.';
-    erroGeral.classList.add('mostrar');
-  }
-});
+  // Validações do JavaScript ok: agora quem decide é o servidor
+  enviarLogin(campoEmail.value.trim(), campoSenha.value);
+}); 
 
 // Mostrar/esconder senha
 botaoOlho.addEventListener('click', function () {
