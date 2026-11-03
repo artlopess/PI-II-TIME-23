@@ -1,6 +1,7 @@
 <!-- Gabriel Augusto Jorge-->
 
 <!DOCTYPE html>
+
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +10,7 @@
     <link rel="stylesheet" href="../styles/dashboard.css">
 </head>
 <body>
-  <div class=" sidebar">
+  <div class="sidebar">
 
     <div class="logo">
       <div class="logo-quadrado">F</div>
@@ -18,88 +19,98 @@
 
     <nav>
       <a class="active" href="dashboard.html">Dashboard</a>
-    <a href="#">Demandas</a>
-    <a href="#">Projetos</a>
-    <a href="#">Usuários</a>
+      <a href="#">Demandas</a>
+      <a href="#">Projetos</a>
+      <a href="#">Usuários</a>
     </nav>
 
+  </div>
+
+  <div class="dashboard">
+
+    <h2>Dashboard</h2>
+
+    <!-- Mensagem de erro da API (fica escondida enquanto estiver vazia) -->
+    <p id="mensagem-erro" class="erro-api"></p>
+
+    <!-- Indicadores por status: cada número tem um id para o JavaScript preencher -->
+    <div class="dashboard-kpis">
+      <div class="infos">Total<hr><span id="kpi-total">-</span></div>
+      <div class="infos">Abertas<hr><span id="kpi-aberta">-</span></div>
+      <div class="infos">Em andamento<hr><span id="kpi-andamento">-</span></div>
+      <div class="infos">Em revisão<hr><span id="kpi-revisao">-</span></div>
+      <div class="infos">Concluídas<hr><span id="kpi-concluida">-</span></div>
+      <div class="infos">Canceladas<hr><span id="kpi-cancelada">-</span></div>
     </div>
+    <br><br>
 
-    <div class="dashboard">
-
-      <h2>Dashboard</h2>
-      <div class="dashboard-kpis">
-      <div class="infos">Total<hr> -</div>
-      <div class="infos">Abertas<hr>-</div>
-      <div class="infos">Em andamentos<hr>-</div>
-      <div class="infos">Em revisão<hr>-</div>
-      <div class="infos">Concluidas<hr>-</div>
-      <div class="infos">Canceladas<hr>-</div>
-      </div>
-      <br><br>
     <div class="linha-card">
+      <!-- Quantidade por prioridade -->
       <div class="prioridade">
         <p>Por Prioridade</p>
         <div class="row">
           <span class="prioridade-label critica">Crítica</span>
-          <div class="values">-</div>
-           </div>
-           <hr>
-          <div class="row">
-            <span class="prioridade-label alta">Alta</span>
-            <div class="values">-</div>
+          <div class="values" id="prio-critica">-</div>
+        </div>
+        <hr>
+        <div class="row">
+          <span class="prioridade-label alta">Alta</span>
+          <div class="values" id="prio-alta">-</div>
         </div>
         <hr>
         <div class="row">
           <span class="prioridade-label media">Média</span>
-          <div class="values">-</div>
+          <div class="values" id="prio-media">-</div>
         </div>
         <hr>
         <div class="row">
           <span class="prioridade-label baixa">Baixa</span>
-          <div class="values">-</div>
+          <div class="values" id="prio-baixa">-</div>
         </div>
-    </div> 
+      </div>
+
+      <!-- Quantidade por tipo -->
       <div class="tipos">
         <p>Por tipos</p>
         <div class="row">
           <span>Tarefas</span>
-          <div class="values">-</div>
+          <div class="values" id="tipo-tarefa">-</div>
         </div>
         <hr>
         <div class="row">
           <span>Defeito</span>
-          <div class="values">-</div>
+          <div class="values" id="tipo-defeito">-</div>
         </div>
         <hr>
         <div class="row">
           <span>Melhoria</span>
-          <div class="values">-</div>
+          <div class="values" id="tipo-melhoria">-</div>
         </div>
         <hr>
         <div class="row">
           <span>Documentação</span>
-          <div class="values">-</div>
+          <div class="values" id="tipo-documentacao">-</div>
         </div>
       </div>
     </div>
     <br><br>
 
+    <!-- Listas de atenção: o JavaScript cria uma linha para cada demanda -->
     <div class="prox">
-      <p>Criticas em aberto</p>
-      <div class="values">-</div>
-      <div class="values">-</div>
+      <p>Críticas em aberto</p>
+      <div id="lista-criticas">
+        <div class="values">Carregando...</div>
+      </div>
       <hr>
-      <p>Proximas do prazo</p>
-      <div class="values">-</div>
-      <div class="values">-</div>
-    
-
+      <p>Próximas do prazo</p>
+      <div id="lista-prazo">
+        <div class="values">Carregando...</div>
+      </div>
     </div>
 
-    
+  </div>
 
-
-    
+  <!-- Script que busca os dados na API e preenche a tela -->
+  <script src="../scripts/dashboard.js"></script>
 </body>
 </html>
