@@ -23,7 +23,7 @@
     </p>
 
     <!-- Usa a mesma validação da tela de cadastro -->
-    <form onsubmit="return validarFormulario()">
+    <form onsubmit="return enviarFormulario()">
 
         <!-- Campo: título, já preenchido -->
         <div class="campo">
@@ -48,7 +48,7 @@
                     <option value="Tarefa">Tarefa</option>
                     <option value="Defeito" selected>Defeito</option>
                     <option value="Melhoria">Melhoria</option>
-                    <option value="Documentacao">Documentação</option>
+                    <option value="Documentação">Documentação</option>
                 </select>
                 <p class="erro" id="erro-tipo"></p>
             </div>
@@ -57,9 +57,9 @@
                 <label for="prioridade">Prioridade *</label>
                 <select id="prioridade">
                     <option value="">Selecione</option>
-                    <option value="Critica">Crítica</option>
+                    <option value="Crítica">Crítica</option>
                     <option value="Alta" selected>Alta</option>
-                    <option value="Media">Média</option>
+                    <option value="Média">Média</option>
                     <option value="Baixa">Baixa</option>
                 </select>
                 <p class="erro" id="erro-prioridade"></p>
@@ -72,10 +72,8 @@
             <div class="campo">
                 <label for="projeto">Projeto *</label>
                 <select id="projeto">
-                    <option value="">Selecione um projeto</option>
-                    <option value="1">Portal do Aluno</option>
-                    <option value="2" selected>App de Entregas</option>
-                    <option value="3">Sistema Financeiro</option>
+                    <!-- Preenchido por GET /projetos, no demanda.js -->
+                    <option value="">Carregando projetos...</option>
                 </select>
                 <p class="erro" id="erro-projeto"></p>
             </div>
@@ -83,10 +81,8 @@
             <div class="campo">
                 <label for="responsavel">Responsável</label>
                 <select id="responsavel">
+                    <!-- Preenchido por GET /usuarios, no demanda.js -->
                     <option value="">Sem responsável por enquanto</option>
-                    <option value="1">Ana Ribeiro</option>
-                    <option value="2" selected>Bruno Tavares</option>
-                    <option value="3">Camila Duarte</option>
                 </select>
             </div>
 
@@ -96,8 +92,8 @@
 
             <div class="campo">
                 <label for="prazo">Prazo de finalização</label>
-                <input type="date" id="prazo" value="2026-10-15">
-                <p class="dica">A checagem de feriado será feita por API em etapa posterior.</p>
+                <input type="date" id="prazo">
+                <p class="dica">Prazos em feriado nacional são recusados pelo servidor.</p>
                 <p class="erro" id="erro-prazo"></p>
             </div>
 
@@ -106,9 +102,13 @@
                 <!-- Na edição o status pode mudar, respeitando as transições permitidas.
                      Concluída não aparece porque a demanda precisa passar por Em revisão -->
                 <select id="status">
+                    <!-- Os valores são exatamente os que a API aceita.
+                         As transições inválidas são recusadas pelo servidor. -->
                     <option value="">Selecione</option>
-                    <option value="EmAndamento" selected>Em andamento</option>
-                    <option value="EmRevisao">Em revisão</option>
+                    <option value="Aberta">Aberta</option>
+                    <option value="Em andamento">Em andamento</option>
+                    <option value="Em revisão">Em revisão</option>
+                    <option value="Concluída">Concluída</option>
                     <option value="Cancelada">Cancelada</option>
                 </select>
                 <p class="erro" id="erro-status"></p>
@@ -120,15 +120,20 @@
         <table class="registro">
             <tr>
                 <th>Data de criação</th>
-                <td>18/08/2026 09:12</td>
+                <!-- Preenchidas pela API, no demanda.js -->
+                <td id="data-criacao">—</td>
             </tr>
             <tr>
                 <th>Última atualização</th>
-                <td>24/08/2026 15:40</td>
+                <td id="data-atualizacao">—</td>
             </tr>
         </table>
 
         <!-- Mensagem exibida quando todos os campos estão corretos -->
+        <!-- Erros devolvidos pela API (400, 404, servidor fora do ar) -->
+        <p class="erro" id="aviso-api"></p>
+
+        <!-- Mensagem de sucesso -->
         <p class="sucesso" id="mensagem-sucesso"></p>
 
         <!-- Botões de ação -->
