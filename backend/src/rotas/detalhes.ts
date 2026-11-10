@@ -18,7 +18,14 @@ router.get('/demandas/:id', (req: Request, res: Response): void => {
     return;
   }
 
-  res.status(200).json(demanda);
+  // Junta o nome do responsável para a tela não precisar de outra requisição.
+  // responsavelId pode ser null (demanda ainda sem responsável).
+  const responsavel = usuarios.find(u => u.id === demanda.responsavelId);
+
+  res.status(200).json({
+    ...demanda,
+    responsavelNome: responsavel ? responsavel.nome : 'Sem responsável'
+  });
 });
 
 // ==========================================
@@ -34,7 +41,14 @@ router.get('/demandas/:id/comentarios', (req: Request, res: Response): void => {
   }
 
   const comentariosFiltrados = comentarios.filter(c => c.demandaId === idDemanda);
-  res.status(200).json(comentariosFiltrados);
+
+  // Junta o nome do autor de cada comentário para a tela exibir
+  const resposta = comentariosFiltrados.map(c => ({
+    ...c,
+    usuarioNome: usuarios.find(u => u.id === c.usuarioId)?.nome ?? 'Desconhecido'
+  }));
+
+  res.status(200).json(resposta);
 });
 
 // ==========================================

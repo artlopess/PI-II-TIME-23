@@ -74,11 +74,17 @@ router.get('/dashboard', (req, res) => {
   limite.setDate(limite.getDate() + DIAS_PRAZO);   // daqui a 7 dias
   limite.setHours(23, 59, 59, 999);                // até o fim desse dia
 
-  const proximasDoPrazo = emAberto.filter(d =>
-    d.prazoFinalizacao !== undefined &&                          // precisa ter prazo
-    d.prazoFinalizacao.getTime() >= hoje.getTime() &&            // não pode já ter vencido
-    d.prazoFinalizacao.getTime() <= limite.getTime()             // vence em até 7 dias
-  );
+    const proximasDoPrazo = emAberto.filter(d => {
+    if (!d.prazo) return false; // sem prazo, não entra na lista
+
+    // O prazo vem como texto ('2026-11-10'). O 'T00:00:00' faz ele virar
+    // meia-noite no horário do Brasil (sem isso, a data "volta" um dia).
+    const prazo = new Date(d.prazo + 'T00:00:00');
+
+    return prazo.getTime() >= hoje.getTime() &&   // não venceu
+           prazo.getTime() <= limite.getTime();   // vence dentro da janela
+  });
+  
 
     res.status(200).json({
     total,

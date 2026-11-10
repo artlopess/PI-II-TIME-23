@@ -1,31 +1,165 @@
-// Leonardo Antunes de Souza - Dados de teste em memória
+// Leonardo Antunes de Souza - Dados de teste em memória (provisório até o Oracle)
+
+import bcrypt from 'bcryptjs';
+
+// Todos os usuários de teste usam a mesma senha, guardada como hash (nunca em texto puro)
+const HASH_PADRAO = bcrypt.hashSync('Senha@1234', 10);
 
 // Os três perfis previstos no escopo
-export type Perfil = 'Administrador' | 'Líder de Projeto' | 'Membro da Equipe';
-
-export interface Usuario {
-  id: number;
-  nome: string;
-  email: string;
-  senha: string;
-  perfil: Perfil;
-}
-
-export const usuarios: Usuario[] = [
-  { id: 1, nome: 'Arthur Lopes',    email: 'arthur_lopes@fluxo.com',     senha: 'Senha@1234', perfil: 'Membro da Equipe' },
-  { id: 2, nome: 'Gabriel Augusto', email: 'gabriel_augusto@fluxo.com',  senha: 'Senha@1234', perfil: 'Administrador' },
-  { id: 3, nome: 'Leonardo Souza',  email: 'leonardo_souza@fluxo.com',   senha: 'Senha@1234', perfil: 'Líder de Projeto' },
-  { id: 4, nome: 'Pedro Businari',  email: 'pedro_businari@fluxo.com',   senha: 'Senha@1234', perfil: 'Administrador' },
-  { id: 5, nome: 'Pedro Osti',      email: 'pedro_osti@fluxo.com',       senha: 'Senha@1234', perfil: 'Membro da Equipe' },
+export const usuarios = [
+  { id: 1, nome: 'Arthur Lopes',    email: 'arthur_lopes@fluxo.com',    senhaHash: HASH_PADRAO, perfil: 'Membro da Equipe' },
+  { id: 2, nome: 'Gabriel Augusto', email: 'gabriel_augusto@fluxo.com', senhaHash: HASH_PADRAO, perfil: 'Administrador' },
+  { id: 3, nome: 'Leonardo Souza',  email: 'leonardo_souza@fluxo.com',  senhaHash: HASH_PADRAO, perfil: 'Líder de Projeto' },
+  { id: 4, nome: 'Pedro Businari',  email: 'pedro_businari@fluxo.com',  senhaHash: HASH_PADRAO, perfil: 'Administrador' },
+  { id: 5, nome: 'Pedro Osti',      email: 'pedro_osti@fluxo.com',      senhaHash: HASH_PADRAO, perfil: 'Membro da Equipe' },
 ];
 
-// Pedro Businari Kawamoto - Dados de teste em memória
+// Projetos de exemplo
+export const projetos = [
+  { id: 1, nome: 'Portal do Aluno' },
+  { id: 2, nome: 'App de Entregas' },
+  { id: 3, nome: 'Sistema Financeiro' },
+];
 
-// Os tipos, prioridades e status previstos no escopo
-export type TipoDemanda = 'Tarefa' | 'Defeito' | 'Melhoria' | 'Documentação';
-export type PrioridadeDemanda = 'Crítica' | 'Alta' | 'Média' | 'Baixa';
-export type StatusDemanda = 'Aberta' | 'Em andamento' | 'Em revisão' | 'Concluída' | 'Cancelada';
+// Formato de uma demanda
+export interface Demanda {
+  id: number;
+  titulo: string;
+  descricao: string;
+  tipo: string;
+  prioridade: string;
+  status: string;
+  projetoId: number;
+  responsavelId: number | null;
+  dataCriacao: string;
+  dataAtualizacao: string;
+  prazo: string | null;
+}
 
+// Demandas de teste com tipos, prioridades, status e prazos variados
+export const demandas: Demanda[] = [
+  {
+    id: 1,
+    titulo: 'Corrigir cálculo do frete para pedidos acima de R$ 200',
+    descricao: 'O frete continua sendo cobrado mesmo com a regra de frete grátis ativa.',
+    tipo: 'Defeito',
+    prioridade: 'Alta',
+    status: 'Em andamento',
+    projetoId: 2,
+    responsavelId: 3,
+    dataCriacao: '2026-09-18T09:12:00.000Z',
+    dataAtualizacao: '2026-09-24T15:40:00.000Z',
+    prazo: '2026-10-20',
+  },
+  {
+    id: 2,
+    titulo: 'Tela de login aceita senha em branco',
+    descricao: 'É possível entrar no sistema sem digitar a senha.',
+    tipo: 'Defeito',
+    prioridade: 'Crítica',
+    status: 'Aberta',
+    projetoId: 1,
+    responsavelId: null,
+    dataCriacao: '2026-10-01T10:00:00.000Z',
+    dataAtualizacao: '2026-10-01T10:00:00.000Z',
+    prazo: '2026-10-15',
+  },
+  {
+    id: 3,
+    titulo: 'Criar relatório mensal de vendas',
+    descricao: 'Relatório com o total vendido por mês e por vendedor.',
+    tipo: 'Tarefa',
+    prioridade: 'Média',
+    status: 'Em revisão',
+    projetoId: 3,
+    responsavelId: 2,
+    dataCriacao: '2026-09-05T08:30:00.000Z',
+    dataAtualizacao: '2026-10-08T11:20:00.000Z',
+    prazo: '2026-10-30',
+  },
+  {
+    id: 4,
+    titulo: 'Melhorar tempo de carregamento da listagem',
+    descricao: 'A listagem demora mais de 5 segundos com muitos registros.',
+    tipo: 'Melhoria',
+    prioridade: 'Média',
+    status: 'Aberta',
+    projetoId: 2,
+    responsavelId: 4,
+    dataCriacao: '2026-10-03T14:00:00.000Z',
+    dataAtualizacao: '2026-10-03T14:00:00.000Z',
+    prazo: '2026-11-10',
+  },
+  {
+    id: 5,
+    titulo: 'Escrever manual de instalação do sistema',
+    descricao: 'Documentar os passos para instalar o sistema em um servidor novo.',
+    tipo: 'Documentação',
+    prioridade: 'Baixa',
+    status: 'Concluída',
+    projetoId: 1,
+    responsavelId: 5,
+    dataCriacao: '2026-08-20T09:00:00.000Z',
+    dataAtualizacao: '2026-09-15T17:00:00.000Z',
+    prazo: '2026-09-15',
+  },
+  {
+    id: 6,
+    titulo: 'Servidor fica fora do ar ao gerar nota fiscal',
+    descricao: 'Ao gerar a nota, a aplicação para de responder e precisa ser reiniciada.',
+    tipo: 'Defeito',
+    prioridade: 'Crítica',
+    status: 'Aberta',
+    projetoId: 3,
+    responsavelId: 2,
+    dataCriacao: '2026-10-09T16:45:00.000Z',
+    dataAtualizacao: '2026-10-09T16:45:00.000Z',
+    prazo: '2026-10-14',
+  },
+  {
+    id: 7,
+    titulo: 'Padronizar as cores dos botões do sistema',
+    descricao: 'Alguns botões usam azul claro e outros azul escuro.',
+    tipo: 'Melhoria',
+    prioridade: 'Baixa',
+    status: 'Cancelada',
+    projetoId: 1,
+    responsavelId: null,
+    dataCriacao: '2026-09-10T13:00:00.000Z',
+    dataAtualizacao: '2026-09-28T10:00:00.000Z',
+    prazo: null,
+  },
+  {
+    id: 8,
+    titulo: 'Permitir exportar a listagem de demandas em PDF',
+    descricao: 'O usuário precisa baixar a listagem filtrada em PDF.',
+    tipo: 'Tarefa',
+    prioridade: 'Alta',
+    status: 'Em andamento',
+    projetoId: 2,
+    responsavelId: 3,
+    dataCriacao: '2026-09-28T11:30:00.000Z',
+    dataAtualizacao: '2026-10-07T09:15:00.000Z',
+    prazo: '2026-10-18',
+  },
+];
+
+// Como ainda não existe banco de dados, o próximo id é controlado aqui
+export function proximoIdDemanda(): number {
+  let maiorId = 0;
+
+  // for...of percorre a lista item por item, sem usar índice
+  for (const demanda of demandas) {
+    if (demanda.id > maiorId) {
+      maiorId = demanda.id;
+    }
+  }
+
+  return maiorId + 1;
+}
+// Pedro Businari Kawamoto - Comentários de teste em memória (provisório até o Oracle)
+
+// Formato de um comentário (usado pelas rotas de detalhes)
 export interface Comentario {
   id: number;
   demandaId: number;
@@ -34,44 +168,7 @@ export interface Comentario {
   dataCriacao: Date;
 }
 
-export interface Demanda {
-  id: number;
-  titulo: string;
-  descricao: string;
-  tipo: TipoDemanda;
-  prioridade: PrioridadeDemanda;
-  status: StatusDemanda;
-  projetoId: number;
-  responsavelId: number | null;
-  dataCriacao: Date;
-  dataAtualizacao: Date;
-  prazoFinalizacao?: Date;
-}
-
-// Gabriel Augusto Jorge - função auxiliar para os dados de teste
-// Gera uma data N dias a partir de hoje 
-// Assim os prazos sempre ficam "perto de hoje", em qualquer dia que testarmos.
-function diasAPartirDeHoje(dias: number): Date {
-  const data = new Date();               // pega a data de hoje
-  data.setDate(data.getDate() + dias);   // soma (ou subtrai) os dias
-  return data;
-}
-
-export const demandas: Demanda[] = [
-  { id: 1, titulo: 'Configurar rotas do Express', descricao: 'Criar os endpoints básicos para a API usando TypeScript.', tipo: 'Tarefa',  prioridade: 'Alta',    status: 'Em andamento', projetoId: 101, responsavelId: 4,    dataCriacao: new Date(), dataAtualizacao: new Date() },
-  { id: 2, titulo: 'Bug na validação de senha',   descricao: 'O sistema aceita senhas com menos de 8 caracteres.',        tipo: 'Defeito', prioridade: 'Crítica', status: 'Aberta',       projetoId: 101, responsavelId: null, dataCriacao: new Date(), dataAtualizacao: new Date() },
-
-  // Gabriel Augusto Jorge - demandas extras para testar o dashboard
-  { id: 3,  titulo: 'Tela de listagem de demandas',      descricao: 'Criar a listagem com filtros por status.', tipo: 'Tarefa',       prioridade: 'Média',   status: 'Concluída',    projetoId: 101, responsavelId: 5,    dataCriacao: diasAPartirDeHoje(-20), dataAtualizacao: diasAPartirDeHoje(-5),  prazoFinalizacao: diasAPartirDeHoje(-4) },
-  { id: 4,  titulo: 'Erro ao salvar comentário',         descricao: 'Comentário é gravado duas vezes.',         tipo: 'Defeito',      prioridade: 'Crítica', status: 'Em andamento', projetoId: 101, responsavelId: 1,    dataCriacao: diasAPartirDeHoje(-6),  dataAtualizacao: diasAPartirDeHoje(-1),  prazoFinalizacao: diasAPartirDeHoje(2) },
-  { id: 5,  titulo: 'Melhorar mensagens de erro',        descricao: 'Mensagens mais claras nos formulários.',   tipo: 'Melhoria',     prioridade: 'Alta',    status: 'Em revisão',   projetoId: 101, responsavelId: 3,    dataCriacao: diasAPartirDeHoje(-9),  dataAtualizacao: diasAPartirDeHoje(-1),  prazoFinalizacao: diasAPartirDeHoje(5) },
-  { id: 6,  titulo: 'Documentar rotas da API',           descricao: 'Descrever os endpoints no README.',        tipo: 'Documentação', prioridade: 'Baixa',   status: 'Aberta',       projetoId: 101, responsavelId: null, dataCriacao: diasAPartirDeHoje(-3),  dataAtualizacao: diasAPartirDeHoje(-3),  prazoFinalizacao: diasAPartirDeHoje(20) },
-  { id: 7,  titulo: 'Trocar cor do botão principal',     descricao: 'Seguir o novo padrão visual.',             tipo: 'Melhoria',     prioridade: 'Baixa',   status: 'Cancelada',    projetoId: 101, responsavelId: 5,    dataCriacao: diasAPartirDeHoje(-15), dataAtualizacao: diasAPartirDeHoje(-10), prazoFinalizacao: diasAPartirDeHoje(3) },
-  { id: 8,  titulo: 'Cadastro aceita e-mail inválido',   descricao: 'Falta validar o formato do e-mail.',       tipo: 'Defeito',      prioridade: 'Alta',    status: 'Aberta',       projetoId: 101, responsavelId: 2,    dataCriacao: diasAPartirDeHoje(-5),  dataAtualizacao: diasAPartirDeHoje(-5),  prazoFinalizacao: diasAPartirDeHoje(-2) },
-  { id: 9,  titulo: 'Manual do usuário',                 descricao: 'Passo a passo do cadastro de demanda.',    tipo: 'Documentação', prioridade: 'Média',   status: 'Em andamento', projetoId: 101, responsavelId: 4,    dataCriacao: diasAPartirDeHoje(-12), dataAtualizacao: diasAPartirDeHoje(-2),  prazoFinalizacao: diasAPartirDeHoje(6) },
-  { id: 10, titulo: 'Falha no login com token expirado', descricao: 'Usuário é deslogado sem aviso.',           tipo: 'Defeito',      prioridade: 'Crítica', status: 'Concluída',    projetoId: 101, responsavelId: 1,    dataCriacao: diasAPartirDeHoje(-30), dataAtualizacao: diasAPartirDeHoje(-8),  prazoFinalizacao: diasAPartirDeHoje(-7) },
-];
-
+// O comentário de teste fala da demanda 1 nova (frete), escrito pelo Leonardo (id 3)
 export const comentarios: Comentario[] = [
-  { id: 1, demandaId: 1, usuarioId: 3, texto: 'Iniciei a estrutura comum do backend.', dataCriacao: new Date() },
+  { id: 1, demandaId: 1, usuarioId: 3, texto: 'Reproduzi o problema com um pedido de R$ 250.', dataCriacao: new Date() },
 ];

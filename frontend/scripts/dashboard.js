@@ -18,9 +18,11 @@ function mostrarErro(mensagem) {
 }
 
 // Transforma a data da API (ex.: 2026-11-05T00:00:00Z) em 05/11/2026
-function formatarData(dataISO) {
-  if (!dataISO) return 'sem prazo';
-  return new Date(dataISO).toLocaleDateString('pt-BR');
+// Transforma o prazo da API ('2026-11-10') em 10/11/2026
+function formatarData(data) {
+  if (!data) return 'sem prazo';
+  const [ano, mes, dia] = data.slice(0, 10).split('-');
+  return `${dia}/${mes}/${ano}`;
 }
 
 // Cria uma linha para cada demanda dentro da lista informada
@@ -37,12 +39,12 @@ function preencherLista(idLista, demandas, textoSeVazia) {
     return;
   }
 
-  for (const demanda of demandas) {
+    for (const demanda of demandas) {
     const linha = document.createElement('div');
     linha.className = 'values';
     linha.textContent =
-      `#${demanda.id} - ${demanda.titulo} | ${demanda.prioridade} | ${demanda.status} | prazo: ${formatarData(demanda.prazoFinalizacao)}`;
-    lista.appendChild(linha);
+         `#${demanda.id} - ${demanda.titulo} | ${demanda.prioridade} | ${demanda.status} | prazo: ${formatarData(demanda.prazo)}`;
+    lista.appendChild(linha); // coloca a linha dentro da lista, na tela
   }
 }
 

@@ -24,7 +24,7 @@
 
     <!-- O onsubmit chama a validação antes de enviar o formulário.
          Se a função devolver false, o envio é cancelado. -->
-    <form onsubmit="return validarFormulario()">
+    <form onsubmit="return enviarFormulario()">
 
         <!-- Campo: título -->
         <div class="campo">
@@ -51,7 +51,7 @@
                     <option value="Tarefa">Tarefa</option>
                     <option value="Defeito">Defeito</option>
                     <option value="Melhoria">Melhoria</option>
-                    <option value="Documentacao">Documentação</option>
+                    <option value="Documentação">Documentação</option>
                 </select>
                 <p class="erro" id="erro-tipo"></p>
             </div>
@@ -60,9 +60,9 @@
                 <label for="prioridade">Prioridade *</label>
                 <select id="prioridade">
                     <option value="">Selecione</option>
-                    <option value="Critica">Crítica</option>
+                    <option value="Crítica">Crítica</option>
                     <option value="Alta">Alta</option>
-                    <option value="Media">Média</option>
+                    <option value="Média">Média</option>
                     <option value="Baixa">Baixa</option>
                 </select>
                 <p class="erro" id="erro-prioridade"></p>
@@ -77,10 +77,8 @@
                 <label for="projeto">Projeto *</label>
                 <!-- Os projetos já vêm cadastrados no banco de dados -->
                 <select id="projeto">
-                    <option value="">Selecione um projeto</option>
-                    <option value="1">Portal do Aluno</option>
-                    <option value="2">App de Entregas</option>
-                    <option value="3">Sistema Financeiro</option>
+                    <!-- Preenchido por GET /projetos, no demanda.js -->
+                    <option value="">Carregando projetos...</option>
                 </select>
                 <p class="erro" id="erro-projeto"></p>
             </div>
@@ -89,10 +87,8 @@
                 <label for="responsavel">Responsável</label>
                 <!-- Campo opcional: pode ficar em branco e ser atribuído depois -->
                 <select id="responsavel">
+                    <!-- Preenchido por GET /usuarios, no demanda.js -->
                     <option value="">Sem responsável por enquanto</option>
-                    <option value="1">Ana Ribeiro</option>
-                    <option value="2">Bruno Tavares</option>
-                    <option value="3">Camila Duarte</option>
                 </select>
             </div>
 
@@ -104,6 +100,7 @@
             <div class="campo">
                 <label for="prazo">Prazo de finalização</label>
                 <input type="date" id="prazo">
+                <p class="dica">Prazos em feriado nacional são recusados pelo servidor.</p>
                 <p class="erro" id="erro-prazo"></p>
             </div>
 
@@ -117,6 +114,10 @@
         </div>
 
         <!-- Mensagem exibida quando todos os campos estão corretos -->
+        <!-- Erros devolvidos pela API (400, 404, servidor fora do ar) -->
+        <p class="erro" id="aviso-api"></p>
+
+        <!-- Mensagem de sucesso -->
         <p class="sucesso" id="mensagem-sucesso"></p>
 
         <!-- Botões de ação -->
@@ -135,7 +136,5 @@
 
   <!-- O script fica no final para carregar depois que a página já existe -->
   <script src="../scripts/demanda.js"></script>
-  <script src="../scripts/prioridade.js"></script>
-  <script src="../scripts/tipo-demanda.js"></script>
 </body>
 </html>
