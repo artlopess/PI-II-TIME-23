@@ -6,7 +6,17 @@ const API = "http://localhost:3000";
 const id = new URLSearchParams(location.search).get("id");
 
 // Datas chegam como string ISO (Date vira texto no JSON); convertemos para pt-BR
-const CAMPOS_DATA = ["dataCriacao", "dataAtualizacao", "prazoFinalizacao"];
+const CAMPOS_DATA = ["dataCriacao", "dataAtualizacao", "prazo"];
+
+// O prazo chega como "AAAA-MM-DD" (sem horário). new Date() o leria como UTC e, no Brasil,
+// mostraria um dia a menos (20/10 viraria 19/10); por isso quebramos o texto manualmente.
+function formatarData(valor) {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(valor)) {
+    const [ano, mes, dia] = valor.split("-");
+    return `${dia}/${mes}/${ano}`;
+  }
+  return new Date(valor).toLocaleDateString("pt-BR");
+}
 
 // Mostra a mensagem de erro da API na tela (e não só no console)
 function mostrarErro(msg) {
@@ -40,9 +50,9 @@ async function carregarDemanda() {
     const campos = ["tipo", "prioridade", "status", "projetoId", "responsavelNome", ...CAMPOS_DATA];
     for (const campo of campos) {
       let valor = d[campo];
-      // prazoFinalizacao é opcional: se não existir, a chave nem vem no JSON
+      // prazo é opcional: pode vir null (demanda sem prazo)   // MUDOU (só o comentário)
       if (valor && CAMPOS_DATA.includes(campo)) {
-        valor = new Date(valor).toLocaleDateString("pt-BR");
+        valor = formatarData(valor);   // MUDOU: antes era new Date(valor).toLocaleDateString("pt-BR")
       }
       document.getElementById(campo).textContent = valor ?? "—";
     }
@@ -50,6 +60,7 @@ async function carregarDemanda() {
     mostrarErro(e.message);
   }
 }
+
 
 // Lista os comentários da demanda
 async function carregarComentarios() {
