@@ -1,14 +1,14 @@
-// Leonardo Antunes de Souza - Servidor básico do backend
+// Leonardo Antunes de Souza - Servidor do backend
 
 import express from 'express';
+import cors from 'cors';
+import rotasAutenticacao from './rotas/autenticacao';
 
 // Rotas de cadastro e edição de demanda e de projetos - Arthur Lopes Santos Silva
 import rotasDemandas from './rotas/demandas';
 import rotasProjetos from './rotas/projetos';
 
 const app = express();
-
-// Porta onde o servidor vai rodar
 const PORTA = 3000;
 
 // Permite que a API entenda o JSON enviado no corpo das requisições.
@@ -38,11 +38,11 @@ app.get('/', (req, res) => {
   res.send('Servidor do Fluxo funcionando!');
 });
 
-// Registra as rotas dos integrantes
+// Rotas de cada integrante entram aqui
+app.use(rotasAutenticacao);
 app.use(rotasDemandas);
 app.use(rotasProjetos);
 
-// Liga o servidor
 app.listen(PORTA, () => {
   console.log('Servidor rodando em http://localhost:' + PORTA);
 });
