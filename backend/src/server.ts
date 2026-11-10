@@ -40,6 +40,8 @@ app.get('/', (req, res) => {
 
 // Rotas de cada integrante entram aqui
 app.use(rotasAutenticacao);
+app.use(rotasDemandas);
+app.use(rotasProjetos);
 
 app.listen(PORTA, () => {
   console.log('Servidor rodando em http://localhost:' + PORTA);
