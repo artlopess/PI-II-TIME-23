@@ -63,96 +63,64 @@ body {
   margin: 0 0 26px;
 }
 
-/* ===== TABELA DO FORMULÁRIO ===== */
-/* A tabela organiza o formulário: nome do campo à esquerda, campo à direita */
-.formulario {
-  width: 100%;
-  border-collapse: collapse; /* remove as bordas duplas e limpa o estilo original */
-  margin-bottom: 8px;
+/* ===== CAMPOS DO FORMULÁRIO ===== */
+/* Cada campo (label + input + mensagem de erro) */
+.campo {
+  margin-bottom: 16px;
 }
 
-.formulario th {
-  padding: 12px 12px 12px 0;
+.campo label {
+  display: block;
   font-size: 13px;
   font-weight: 500;
-  text-align: left;
-  vertical-align: top; /* alinha o nome do campo com o topo da caixa */
-  width: 32%;
+  margin-bottom: 6px;
 }
 
-.formulario td {
-  padding: 12px 0;
-  vertical-align: top;
-}
-
-/* ===== CAIXAS DOS CAMPOS ===== */
-/* A div abaixo tem a aparência de um campo preenchível */
-.caixa {
+/* Mesma aparência para input, select e textarea */
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  box-sizing: border-box; /* faz o padding caber dentro dos 100% de largura */
   padding: 10px 12px;
   font-size: 14px;
+  font-family: 'Inter', sans-serif;
   border: 1px solid rgb(8, 0, 0);
   border-radius: 6px;
   color: rgb(0, 0, 0);
   background: white;
 }
 
-/* Caixa mais alta, usada na descrição */
-.caixa-alta {
-  min-height: 70px;
+.campo textarea {
+  min-height: 80px;
+  resize: vertical; /* o usuário só consegue redimensionar na vertical */
 }
 
-/* Caixa ainda sem preenchimento: o texto de exemplo fica em cinza */
-.caixa-vazia {
-  color: rgb(150, 150, 150);
-}
-
-/* Caixa bloqueada, como o status na tela de cadastro */
-.caixa-bloqueada {
+/* Campo bloqueado, como o status na tela de cadastro */
+.campo input:disabled {
   background: rgb(244, 246, 249);
   color: rgb(85, 85, 85);
+  cursor: not-allowed;
 }
 
-/* Caixa com erro: borda vermelha */
-.caixa-erro {
+/* Linha com dois campos lado a lado */
+.linha-dupla {
+  display: flex;
+  gap: 16px;
+}
+
+.linha-dupla .campo {
+  flex: 1; /* os dois campos ocupam a mesma largura */
+}
+
+/* ===== ESTADO DE ERRO ===== */
+/* Esta classe é colocada pelo JavaScript quando a validação falha */
+.campo-erro {
   border-color: rgb(179, 38, 30);
 }
 
-/* ===== LISTAS DE OPÇÕES ===== */
-/* Lista sem marcador, com os itens lado a lado */
-.opcoes {
-  list-style: none; /* tira as bolinhas da lista */
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap; /* quebra a linha quando não couber */
-  gap: 8px;
-}
-
-.opcoes li {
-  padding: 7px 14px;
-  font-size: 13px;
-  border: 1px solid rgb(8, 0, 0);
-  border-radius: 6px;
-  background: white;
-}
-
-/* Opção que está selecionada no momento */
-.opcoes .escolhida {
-  background: rgb(59, 59, 163);
-  border-color: rgb(59, 59, 163);
-  color: white;
-  font-weight: 600;
-}
-
-/* ===== TEXTOS DE APOIO ===== */
-/* Explicação em cinza abaixo do campo */
-.dica {
-  font-size: 12px;
-  color: rgb(85, 85, 85);
-  margin: 6px 0 0;
-}
-
-/* Mensagem de erro em vermelho abaixo do campo */
+/* Mensagem de erro abaixo do campo.
+   Começa vazia no HTML e recebe o texto pelo JavaScript. */
 .erro {
   font-size: 12px;
   font-weight: 600;
@@ -160,11 +128,28 @@ body {
   margin: 6px 0 0;
 }
 
+/* ===== MENSAGEM DE SUCESSO ===== */
+/* Aparece quando todos os campos passam na validação */
+.sucesso {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgb(21, 115, 71);
+  margin: 16px 0 0;
+  text-align: center;
+}
+
+/* Texto de apoio em cinza, logo abaixo do campo */
+.dica {
+  font-size: 12px;
+  color: rgb(85, 85, 85);
+  margin: 6px 0 0;
+}
+
 /* ===== TABELA DAS DATAS AUTOMÁTICAS ===== */
 .registro {
   width: 100%;
-  border-collapse: collapse;
-  margin: 16px 0 0;
+  border-collapse: collapse; /* remove as bordas duplas e limpa o estilo original */
+  margin: 8px 0 0;
 }
 
 .registro th {
@@ -199,9 +184,11 @@ body {
   padding: 11px;
   background: rgb(59, 59, 163);
   color: white;
+  border: none;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 600;
+  font-family: 'Inter', sans-serif;
   text-align: center;
   cursor: pointer;
 }
@@ -229,20 +216,10 @@ body {
 }
 
 /* ===== TELAS PEQUENAS ===== */
-/* Abaixo de 560px o nome do campo fica em cima da caixa, e não ao lado */
+/* Abaixo de 560px os campos lado a lado passam a ficar um embaixo do outro */
 @media (max-width: 560px) {
-  .formulario th,
-  .formulario td {
-    display: block;
-    width: auto;
-    padding: 0;
-  }
-
-  .formulario th {
-    margin-bottom: 6px;
-  }
-
-  .formulario td {
-    margin-bottom: 16px;
+  .linha-dupla {
+    flex-direction: column;
+    gap: 0;
   }
 }
