@@ -1,12 +1,14 @@
 // Leonardo Antunes de Souza - Servidor do backend
 
 import express from 'express';
-import cors from 'cors';
 import rotasAutenticacao from './rotas/autenticacao';
 
 // Rotas de cadastro e edição de demanda e de projetos - Arthur Lopes Santos Silva
 import rotasDemandas from './rotas/demandas';
 import rotasProjetos from './rotas/projetos';
+
+// Rotas de detalhes e comentários da demanda - Pedro Businari Kawamoto
+import rotasdetalhes from './rotas/detalhes';
 
 const app = express();
 const PORTA = 3000;
@@ -42,6 +44,7 @@ app.get('/', (req, res) => {
 app.use(rotasAutenticacao);
 app.use(rotasDemandas);
 app.use(rotasProjetos);
+app.use(rotasdetalhes);
 
 app.listen(PORTA, () => {
   console.log('Servidor rodando em http://localhost:' + PORTA);

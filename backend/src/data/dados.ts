@@ -157,3 +157,18 @@ export function proximoIdDemanda(): number {
 
   return maiorId + 1;
 }
+// Pedro Businari Kawamoto - Comentários de teste em memória (provisório até o Oracle)
+
+// Formato de um comentário (usado pelas rotas de detalhes)
+export interface Comentario {
+  id: number;
+  demandaId: number;
+  usuarioId: number;
+  texto: string;
+  dataCriacao: Date;
+}
+
+// O comentário de teste fala da demanda 1 nova (frete), escrito pelo Leonardo (id 3)
+export const comentarios: Comentario[] = [
+  { id: 1, demandaId: 1, usuarioId: 3, texto: 'Reproduzi o problema com um pedido de R$ 250.', dataCriacao: new Date() },
+];
