@@ -88,4 +88,3 @@ Pré-requisitos: **Node.js LTS** e um **Oracle** acessível (o driver `oracledb`
 - `POST /login` aceita no máximo **5 tentativas por IP a cada 15 minutos**; depois disso responde `429` com `Retry-After`. Um login correto zera o contador.
 - Comentários têm no máximo **500 caracteres** (validado pela API e pelo formulário).
 
-Usuários de teste (senha `Senha@1234` para todos): `arthur_lopes@fluxo.com` (Membro), `gabriel_augusto@fluxo.com` (Admin), `leonardo_souza@fluxo.com` (Líder), `pedro_businari@fluxo.com` (Admin) e `pedro_osti@fluxo.com` (Membro).
