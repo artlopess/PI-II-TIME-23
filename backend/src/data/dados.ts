@@ -1,4 +1,7 @@
-// Leonardo Antunes de Souza - Dados de teste em memória (provisório até o Oracle)
+// Leonardo Antunes de Souza - Dados de teste em memória
+// IMPORTANTE: este arquivo NÃO é mais usado em runtime. As rotas passaram a ler
+// e gravar no Oracle pelos repositórios em src/repostiorios/. Mantido apenas
+// como referência/fixture dos dados que estão em backend/database/*.sql.
 
 import bcrypt from 'bcryptjs';
 
@@ -19,6 +22,16 @@ export const projetos = [
   { id: 1, nome: 'Portal do Aluno' },
   { id: 2, nome: 'App de Entregas' },
   { id: 3, nome: 'Sistema Financeiro' },
+];
+
+// Time 23 - Vínculo usuário x projeto usado pelas regras de perfil do escopo.
+// Administradores enxergam tudo; Líder e Membro só os projetos desta lista.
+export const usuarioProjetos: Array<{ usuarioId: number; projetoId: number }> = [
+  { usuarioId: 1, projetoId: 2 }, // Arthur (Membro)
+  { usuarioId: 3, projetoId: 1 }, // Leonardo (Líder)
+  { usuarioId: 3, projetoId: 2 },
+  { usuarioId: 5, projetoId: 1 }, // Pedro Osti (Membro)
+  { usuarioId: 5, projetoId: 3 },
 ];
 
 // Formato de uma demanda

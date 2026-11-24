@@ -1,9 +1,9 @@
 /* Arthur Lopes Santos Silva - Conexao da API com o banco Oracle */
 
-
-
 /* Os dados de acesso ficam no arquivo .env, que nao vai para o GitHub.
-   Copie o .env.example para .env e preencha com a sua senha. */
+   Copie o .env.example para .env e preencha com a sua senha.
+   Este import deve vir antes da leitura de process.env abaixo. */
+import "dotenv/config";
 
 import oracledb from "oracledb";
 
@@ -29,6 +29,15 @@ const CONEXAO = process.env.DB_CONEXAO || "localhost:1521/orclpdb";
    Um "pool" e um conjunto de conexoes que fica aberto e vai sendo
    reaproveitado. Abrir uma conexao nova a cada requisicao seria lento. */
 export async function iniciarBanco(): Promise<void> {
+    /* Sem senha o driver tentaria entrar como usuario/senha vazia e a
+       mensagem do Oracle seria confusa. Avisamos o que configurar. */
+    if (SENHA === "") {
+        throw new Error(
+            "DB_SENHA nao foi definida. Copie backend/.env.example para backend/.env " +
+            "e preencha DB_USUARIO, DB_SENHA e DB_CONEXAO antes de iniciar a API."
+        );
+    }
+
     await oracledb.createPool({
         user: USUARIO,
         password: SENHA,
@@ -37,12 +46,29 @@ export async function iniciarBanco(): Promise<void> {
         poolMax: 5
     });
 
+    /* createPool() so registra os dados: ele não abre conexão com o Oracle.
+       Pegar e devolver uma conexão garante que o banco está realmente acessível
+       antes de a API começar a aceitar requisições. */
+    try {
+        const conexao = await oracledb.getConnection();
+        await conexao.close();
+    } catch (erro) {
+        await oracledb.getPool().close(5).catch(() => undefined);
+        throw erro;
+    }
+
     console.log("Conectado ao banco Oracle em " + CONEXAO);
 }
 
-/* Fecha o pool quando o servidor e encerrado */
+/* Fecha o pool quando o servidor e encerrado.
+   O try/catch evita erro caso a conexao nunca tenha sido aberta. */
 export async function fecharBanco(): Promise<void> {
-    await oracledb.getPool().close(5);
+    try {
+        await oracledb.getPool().close(5);
+        console.log("Pool do banco fechado.");
+    } catch {
+        /* Pool inexistente: nada a fechar. */
+    }
 }
 
 
@@ -86,6 +112,44 @@ export async function executar(sql: string, parametros: any = {}): Promise<any> 
     }
 }
 
+
+/* ===== TRANSAÇÃO =====
+   Usada quando uma operação precisa de mais de um INSERT/UPDATE/DELETE.
+   O caso atual é o PUT /demandas/:id: alterar a demanda e gravar o histórico
+   precisa acontecer junto — ou os dois, ou nenhum.
+
+   As funções recebidas usam a MESMA conexão, sem autoCommit. O commit só
+   acontece se o código terminar sem lançar erro; qualquer exceção desfaz
+   tudo (rollback) antes de devolver a conexão ao pool. */
+export interface ClienteTransacao {
+    consultar(sql: string, parametros?: any): Promise<any[]>;
+    executar(sql: string, parametros?: any): Promise<any>;
+}
+
+export async function executarEmTransacao<T>(fn: (cliente: ClienteTransacao) => Promise<T>): Promise<T> {
+    const conexao = await oracledb.getConnection();
+
+    try {
+        const cliente: ClienteTransacao = {
+            consultar: async (sql, parametros = {}) => {
+                const resultado = await conexao.execute(sql, parametros);
+                return resultado.rows || [];
+            },
+            executar: async (sql, parametros = {}) => {
+                return conexao.execute(sql, parametros, { autoCommit: false });
+            }
+        };
+
+        const resultado = await fn(cliente);
+        await conexao.commit();
+        return resultado;
+    } catch (erro) {
+        await conexao.rollback().catch(() => undefined);
+        throw erro;
+    } finally {
+        await conexao.close();
+    }
+}
 
 /* ===== BUSCAR UMA LINHA SO =====
    Atalho para quando a consulta devolve no maximo um registro.

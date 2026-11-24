@@ -7,6 +7,7 @@
 --   DROP TABLE historico;
 --   DROP TABLE comentarios;
 --   DROP TABLE demandas;
+--   DROP TABLE usuario_projetos;
 --   DROP TABLE usuarios;
 --   DROP TABLE projetos;
  
@@ -38,6 +39,26 @@ CREATE TABLE usuarios (
     CONSTRAINT ck_usuarios_perfil CHECK (
         perfil IN ('Administrador', 'Líder de Projeto', 'Membro da Equipe')
     )
+);
+
+
+-- ============================================================
+-- USUARIO_PROJETOS
+-- Vínculo entre usuários e projetos. Substitui o array em memória
+-- usado pelas regras de perfil: Administrador vê tudo, Líder e
+-- Membro só enxergam os projetos desta tabela.
+-- ============================================================
+CREATE TABLE usuario_projetos (
+    usuario_id  NUMBER NOT NULL,
+    projeto_id  NUMBER NOT NULL,
+
+    -- Um mesmo usuário/projeto não pode aparecer duas vezes.
+    CONSTRAINT pk_usuario_projetos PRIMARY KEY (usuario_id, projeto_id),
+
+    CONSTRAINT fk_usuario_projetos_usuario
+        FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE,
+    CONSTRAINT fk_usuario_projetos_projeto
+        FOREIGN KEY (projeto_id) REFERENCES projetos (id) ON DELETE CASCADE
 );
 
 
@@ -133,6 +154,7 @@ CREATE TABLE historico (
 CREATE INDEX ix_demandas_status     ON demandas (status);
 CREATE INDEX ix_demandas_prioridade ON demandas (prioridade);
 CREATE INDEX ix_demandas_projeto    ON demandas (projeto_id);
+CREATE INDEX ix_usuario_projetos_projeto ON usuario_projetos (projeto_id);
 CREATE INDEX ix_comentarios_demanda ON comentarios (demanda_id);
 CREATE INDEX ix_historico_demanda   ON historico (demanda_id);
 

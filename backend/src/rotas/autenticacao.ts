@@ -4,13 +4,15 @@ import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { SEGREDO } from '../config';
-import { verificarToken } from '../middleware/autenticacao';
+import { verificarToken, exigirPerfil } from '../middleware/autenticacao';
+import { limitarTentativasLogin, registrarLoginSucesso } from '../middleware/limite-taxa';
 import { buscarUsuarioPorEmail, listarUsuarios } from '../repostiorios/usuarios';
 
 const rotas = Router();
 
-// POST /login: recebe { email, senha } e devolve { token, usuario }
-rotas.post('/login', async (req, res) => {
+// POST /login: recebe { email, senha } e devolve { token, usuario }.
+// O limite de tentativas impede força bruta; um login válido zera o contador.
+rotas.post('/login', limitarTentativasLogin, async (req, res) => {
   const { email, senha } = req.body ?? {};
 
   // 400: dados ausentes ou no formato errado
@@ -27,6 +29,8 @@ rotas.post('/login', async (req, res) => {
     return res.status(401).json({ erro: 'Usuário ou senha inválidos.' });
   }
 
+  registrarLoginSucesso(req);
+
   const token = jwt.sign({ id: usuario.id, perfil: usuario.perfil }, SEGREDO, { expiresIn: '2h' });
 
   res.status(200).json({
@@ -35,8 +39,9 @@ rotas.post('/login', async (req, res) => {
   });
 });
 
-// GET /usuarios: lista os usuários (usada para escolher o responsável de uma demanda)
-rotas.get('/usuarios', verificarToken, async (req, res) => {
+// GET /usuarios: lista os usuários (usada para escolher o responsável de uma demanda).
+// Administrador e Líder podem atribuir responsáveis; Membro não (escopo §2.2.4).
+rotas.get('/usuarios', verificarToken, exigirPerfil('Administrador', 'Líder de Projeto'), async (req, res) => {
   res.status(200).json(await listarUsuarios());
 });
 

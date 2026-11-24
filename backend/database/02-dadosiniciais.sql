@@ -35,6 +35,18 @@ INSERT INTO usuarios (id, nome, email, senha_hash, perfil) VALUES
 
 
 -- ============================================================
+-- USUARIO_PROJETOS
+-- Vínculos usados para limitar o que Líder e Membro enxergam.
+-- Administradores (2 e 4) não precisam de vínculo: veem tudo.
+-- ============================================================
+INSERT INTO usuario_projetos (usuario_id, projeto_id) VALUES (1, 2); -- Arthur (Membro)
+INSERT INTO usuario_projetos (usuario_id, projeto_id) VALUES (3, 1); -- Leonardo (Líder)
+INSERT INTO usuario_projetos (usuario_id, projeto_id) VALUES (3, 2);
+INSERT INTO usuario_projetos (usuario_id, projeto_id) VALUES (5, 1); -- Pedro Osti (Membro)
+INSERT INTO usuario_projetos (usuario_id, projeto_id) VALUES (5, 3);
+
+
+-- ============================================================
 -- DEMANDAS
 -- Tipos, prioridades, status e prazos variados de proposito,
 -- para os filtros e o dashboard terem o que mostrar.
@@ -175,6 +187,7 @@ COMMIT;
 -- ============================================================
 -- SELECT COUNT(*) AS projetos    FROM projetos;     -- esperado: 3
 -- SELECT COUNT(*) AS usuarios    FROM usuarios;     -- esperado: 5
+-- SELECT COUNT(*) AS vinculos    FROM usuario_projetos; -- esperado: 5
 -- SELECT COUNT(*) AS demandas    FROM demandas;     -- esperado: 8
 -- SELECT COUNT(*) AS comentarios FROM comentarios;  -- esperado: 5
 -- SELECT COUNT(*) AS historico   FROM historico;    -- esperado: 5
