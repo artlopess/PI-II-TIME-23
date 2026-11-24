@@ -22,6 +22,12 @@
         Descreva a atividade e escolha o projeto. O responsável pode ser definido depois.
     </p>
 
+    <!-- Exibido pelo demanda.js quando o perfil não pode criar demandas. -->
+    <div id="aviso-perfil" class="aviso-perfil" hidden>
+        <p id="texto-aviso-perfil"></p>
+        <a href="listagem.html">Voltar à listagem</a>
+    </div>
+
     <!-- O onsubmit chama a validação antes de enviar o formulário.
          Se a função devolver false, o envio é cancelado. -->
     <form onsubmit="return enviarFormulario()">
@@ -122,7 +128,7 @@
 
         <!-- Botões de ação -->
         <div class="acoes">
-            <div class="botao-cancelar">Cancelar</div>
+            <button type="button" id="btn-cancelar" class="botao-cancelar">Cancelar</button>
             <button type="submit" class="botao-salvar">Salvar demanda</button>
         </div>
 
@@ -135,6 +141,7 @@
   </div>
 
   <!-- O script fica no final para carregar depois que a página já existe -->
+  <script src="../scripts/autenticacao.js"></script>
   <script src="../scripts/demanda.js"></script>
 </body>
 </html>

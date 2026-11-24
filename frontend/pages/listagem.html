@@ -1,88 +1,142 @@
-<!--Pedro Osti-->
+<!-- Pedro Osti - Listagem de demandas conectada à API -->
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
-    <title>Demandas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demandas - Fluxo</title>
     <link rel="stylesheet" href="../styles/listagem.css">
 </head>
 
 <body>
+    <div class="pagina">
 
-    <h1>Lista de Demandas</h1>
+        <header class="topo">
+            <div class="logo">
+                <div class="logo-quadrado">F</div>
+                <div class="logo-nome">Fluxo</div>
+            </div>
+            <div>
+                <h1>Lista de demandas</h1>
+                <p id="saudacao" class="saudacao">Carregando usuário...</p>
+            </div>
+            <div class="topo-acoes">
+                <a class="botao-secundario" href="dashboard.html">Dashboard</a>
+                <a id="btn-nova-demanda" class="botao-primario" href="cadastro-demanda.html" hidden>Nova demanda</a>
+                <a id="botao-sair" class="botao-secundario" href="#">Sair</a>
+            </div>
+        </header>
 
-    <input type="text" placeholder="Buscar demanda">
+        <div id="carregando" class="aviso-carregando" role="status" hidden>Carregando demandas...</div>
+        <p id="mensagem-erro" class="mensagem-erro" role="alert"></p>
 
-    <select>
-        <option>Status</option>
-        <option>Aberta</option>
-        <option>Em andamento</option>
-        <option>Em revisão</option>
-        <option>Concluída</option>
-        <option>Cancelada</option>
-    </select>
+        <section class="card-lista">
 
-    <select>
-        <option>Prioridade</option>
-        <option>Crítica</option>
-        <option>Alta</option>
-        <option>Média</option>
-        <option>Baixa</option>
-    </select>
+            <form id="form-filtros" class="filtros">
+                <label>Status
+                    <select name="status">
+                        <option value="">Todos</option>
+                        <option value="Aberta">Aberta</option>
+                        <option value="Em andamento">Em andamento</option>
+                        <option value="Em revisão">Em revisão</option>
+                        <option value="Concluída">Concluída</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                </label>
 
-    <button>Buscar</button>
+                <label>Prioridade
+                    <select name="prioridade">
+                        <option value="">Todas</option>
+                        <option value="Crítica">Crítica</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Média">Média</option>
+                        <option value="Baixa">Baixa</option>
+                    </select>
+                </label>
 
-    <table>
+                <label>Tipo
+                    <select name="tipo">
+                        <option value="">Todos</option>
+                        <option value="Tarefa">Tarefa</option>
+                        <option value="Defeito">Defeito</option>
+                        <option value="Melhoria">Melhoria</option>
+                        <option value="Documentação">Documentação</option>
+                    </select>
+                </label>
 
-        <tr>
-            <th>Título</th>
-            <th>Tipo</th>
-            <th>Prioridade</th>
-            <th>Status</th>
-            <th>Responsável</th>
-            <th>Prazo</th>
-        </tr>
+                <label id="campo-responsavel">Responsável
+                    <select name="responsavel" id="filtro-responsavel">
+                        <option value="">Todos</option>
+                    </select>
+                </label>
 
-        <tr>
-            <td>Corrigir login</td>
-            <td>Defeito</td>
-            <td>Crítica</td>
-            <td>Aberta</td>
-            <td>João</td>
-            <td>05/09/2026</td>
-        </tr>
+                <label>Projeto
+                    <select name="projeto" id="filtro-projeto">
+                        <option value="">Todos</option>
+                    </select>
+                </label>
 
-        <tr>
-            <td>Criar página inicial</td>
-            <td>Tarefa</td>
-            <td>Alta</td>
-            <td>Em andamento</td>
-            <td>Pedro</td>
-            <td>10/09/2026</td>
-        </tr>
+                <label class="campo-busca">Busca
+                    <input name="busca" type="search" placeholder="Título ou descrição">
+                </label>
 
-        <tr>
-            <td>Adicionar filtro</td>
-            <td>Melhoria</td>
-            <td>Média</td>
-            <td>Em revisão</td>
-            <td>Maria</td>
-            <td>03/09/2026</td>
-        </tr>
+                <label>Ordenar por
+                    <select name="ordenarPor">
+                        <option value="dataCriacao">Data de criação</option>
+                        <option value="prioridade">Prioridade</option>
+                        <option value="prazo">Prazo de finalização</option>
+                        <option value="status">Status</option>
+                    </select>
+                </label>
 
-        <tr>
-            <td>Fazer documentação</td>
-            <td>Documentação</td>
-            <td>Baixa</td>
-            <td>Concluída</td>
-            <td>Lucas</td>
-            <td>29/08/2026</td>
-        </tr>
+                <label>Direção
+                    <select name="direcao">
+                        <option value="asc">Crescente</option>
+                        <option value="desc">Decrescente</option>
+                    </select>
+                </label>
 
-    </table>
+                <div class="filtros-acoes">
+                    <button type="submit" class="botao-primario">Buscar</button>
+                    <button type="button" id="btn-limpar" class="botao-secundario">Limpar</button>
+                </div>
+            </form>
 
+            <div class="cabecalho-tabela">
+                <h2>Demandas</h2>
+                <span id="total-demandas" class="badge">0</span>
+            </div>
+
+            <div class="tabela-wrap">
+                <p class="dica-tabela">Arraste a tabela para o lado para ver todas as colunas.</p>
+                <table id="tabela-demandas">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Tipo</th>
+                            <th>Prioridade</th>
+                            <th>Status</th>
+                            <th>Projeto</th>
+                            <th>Responsável</th>
+                            <th>Data de criação</th>
+                            <th>Prazo de finalização</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela"></tbody>
+                </table>
+                <p id="tabela-vazia" class="vazio" hidden>Nenhuma demanda encontrada para os filtros selecionados.</p>
+            </div>
+
+        </section>
+
+        <p class="rodape">Sistema de Acompanhamento de Demandas de Desenvolvimento</p>
+    </div>
+
+    <!-- autenticacao.js fornece token, usuário, chamarApi() e sair() -->
+    <script src="../scripts/autenticacao.js"></script>
+    <script src="../scripts/listagem.js"></script>
 </body>
 
 </html>
-```

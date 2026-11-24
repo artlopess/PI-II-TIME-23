@@ -201,10 +201,35 @@ body {
   color: rgb(59, 59, 163);
   border: 1px solid rgb(59, 59, 163);
   border-radius: 6px;
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 600;
   text-align: center;
   cursor: pointer;
+}
+
+/* Aviso de perfil: substitui o formulário quando o usuário não pode usá-lo */
+.aviso-perfil {
+  background: #fdecea;
+  border: 1px solid rgb(179, 38, 30);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.aviso-perfil p {
+  margin: 0 0 10px;
+}
+
+.aviso-perfil a {
+  color: rgb(59, 59, 163);
+  font-weight: 600;
+}
+
+.aviso-perfil[hidden] {
+  display: none;
 }
 
 /* Rodapé do card */

@@ -255,3 +255,52 @@ body {
 .regras-senha li.valida::before {
   content: "✓";
 }
+
+/* ===== RESPONSIVIDADE ===== */
+/* Em telas estreitas o card ocupa a largura toda e o conteúdo não é cortado. */
+@media (max-width: 600px) {
+  body {
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .card {
+    max-width: 100%;
+    padding: 24px 20px;
+  }
+
+  .card h1 {
+    font-size: 22px;
+  }
+
+  .card .subtitulo {
+    margin-bottom: 20px;
+  }
+
+  .campo input {
+    width: 100%;
+  }
+
+  .linha-opcoes {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .botao-olho {
+    right: 18px;
+  }
+}
+
+@media (max-width: 380px) {
+  body {
+    padding: 10px;
+  }
+
+  .card {
+    padding: 20px 16px;
+  }
+
+  .regras-senha {
+    font-size: 11px;
+  }
+}

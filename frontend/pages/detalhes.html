@@ -12,8 +12,9 @@
     <!-- Container principal: cards empilhados, com os detalhes em destaque -->
     <div class="dashboard-container">
 
-        <!-- Mensagens de erro retornadas pela API (400, 404...) aparecem aqui -->
+        <!-- Mensagens de erro e confirmações retornadas pela API aparecem aqui -->
         <div id="erro" class="erro" hidden></div>
+        <div id="sucesso" class="sucesso" hidden></div>
 
         <!-- CARD PRINCIPAL: Detalhes da Demanda (<td> preenchidos pelo detalhes.js via GET /demandas/:id) -->
         <div class="card">
@@ -36,11 +37,23 @@
                 <tr><th>Prazo de finalização</th><td id="prazo"></td></tr>
             </table>
 
+            <!-- Membro não edita a demanda inteira: só avança o status das
+                 demandas atribuídas a ele, com opções filtradas pelo ciclo de vida. -->
+            <div id="area-status-membro" class="campo-finalizacao" hidden>
+                <label for="status-membro">Atualizar status</label>
+                <select id="status-membro"></select>
+                <button id="btn-salvar-status" type="button">Salvar status</button>
+            </div>
+
+            <!-- Atalho para a tela de finalização. O detalhes.js só o exibe para
+                 Admin/Líder e quando a demanda ainda não foi encerrada. -->
+            <a id="btn-finalizar" class="botao-finalizar" href="#" hidden>Finalizar ou cancelar demanda</a>
+
             <!-- Histórico escondido: só aparece ao clicar no botão (comportamento nativo do <details>) -->
             <details class="historico">
                 <summary>Histórico de alterações</summary>
                 <ul id="historico">
-                    <li>Histórico ainda não disponível.</li>
+                    <li>Carregando histórico...</li>
                 </ul>
             </details>
 
@@ -52,13 +65,15 @@
             <h2>Comentários</h2>
             <ul id="comentarios"></ul>
 
-            <textarea id="novo-comentario" placeholder="Escreva um comentário"></textarea>
+            <!-- maxlength espelha o limite do backend (500 caracteres) -->
+            <textarea id="novo-comentario" maxlength="500" placeholder="Escreva um comentário (máximo de 500 caracteres)"></textarea>
             <button id="btn-comentar" type="button">Comentar</button>
         </div>
 
     </div>
 
-    <!-- Script da tela: carrega a demanda e os comentários da API -->
+    <!-- autenticacao.js centraliza token, usuário e logout -->
+    <script src="../scripts/autenticacao.js"></script>
     <script src="../scripts/detalhes.js"></script>
 </body>
 </html>

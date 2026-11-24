@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!-- Gabriel Augusto Jorge - Tela de Finalização e Cancelamento de Demanda -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar demanda - Acompanhamento de Demandas</title>
+    <link rel="stylesheet" href="../styles/detalhes.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <div class="card">
+            <div class="logo">
+                <div class="logo-quadrado">F</div>
+                <div class="logo-nome">Fluxo</div>
+            </div>
+
+            <h1>Finalizar demanda</h1>
+            <p class="subtitulo">
+                A alteração é gravada pela API. A observação informada fica registrada como comentário, com o seu usuário como autor.
+            </p>
+
+            <p class="resumo-demanda">
+                Demanda: <strong id="titulo-demanda">Carregando...</strong><br>
+                Status atual: <strong id="status-atual">—</strong>
+            </p>
+
+            <!-- Erros da API e confirmação de sucesso aparecem aqui -->
+            <div id="mensagem" class="mensagem" hidden></div>
+
+            <form id="formFinalizacao">
+                <div class="campo-finalizacao">
+                    <label for="status">Nova situação *</label>
+                    <select id="status">
+                        <option value="">Selecione...</option>
+                    </select>
+                    <small id="ajuda-status" class="ajuda"></small>
+                </div>
+
+                <div class="campo-finalizacao">
+                    <label for="data">Data da finalização *</label>
+                    <input type="date" id="data">
+                    <small class="ajuda">A data faz parte da observação gravada na demanda.</small>
+                </div>
+
+                <div class="campo-finalizacao">
+                    <label for="observacao">Observação *</label>
+                    <textarea id="observacao" maxlength="200" placeholder="Descreva o que foi entregue ou o motivo do cancelamento"></textarea>
+                    <small id="contador" class="contador">0/200 caracteres</small>
+                </div>
+
+                <button type="submit" id="btn-finalizar-demanda">Confirmar finalização</button>
+            </form>
+
+            <p class="acoes-finais">
+                <a id="link-voltar" class="botao-voltar" href="detalhes.html">Voltar aos detalhes</a>
+            </p>
+
+            <p class="rodape">Sistema de Acompanhamento de demandas de desenvolvimento</p>
+        </div>
+    </div>
+
+    <!-- autenticacao.js fornece URL_API, obterToken(), obterUsuario(), exigirLogin() e sair() -->
+    <script src="../scripts/autenticacao.js"></script>
+    <script src="../scripts/finalizacao.js"></script>
+</body>
+</html>

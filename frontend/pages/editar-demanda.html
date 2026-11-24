@@ -22,6 +22,12 @@
         Alterações de status, responsável, prioridade e prazo ficam registradas no histórico.
     </p>
 
+    <!-- Exibido pelo demanda.js para Membro ou para demandas encerradas. -->
+    <div id="aviso-perfil" class="aviso-perfil" hidden>
+        <p id="texto-aviso-perfil"></p>
+        <a href="listagem.html">Voltar à listagem</a>
+    </div>
+
     <!-- Usa a mesma validação da tela de cadastro -->
     <form onsubmit="return enviarFormulario()">
 
@@ -100,16 +106,11 @@
             <div class="campo">
                 <label for="status">Status *</label>
                 <!-- Na edição o status pode mudar, respeitando as transições permitidas.
-                     Concluída não aparece porque a demanda precisa passar por Em revisão -->
+                     As opções são montadas pelo demanda.js a partir do status atual. -->
                 <select id="status">
-                    <!-- Os valores são exatamente os que a API aceita.
-                         As transições inválidas são recusadas pelo servidor. -->
-                    <option value="">Selecione</option>
-                    <option value="Aberta">Aberta</option>
-                    <option value="Em andamento">Em andamento</option>
-                    <option value="Em revisão">Em revisão</option>
-                    <option value="Concluída">Concluída</option>
-                    <option value="Cancelada">Cancelada</option>
+                    <!-- Preenchido por demanda.js só com as transições permitidas
+                         para o status atual da demanda. -->
+                    <option value="">Carregando status...</option>
                 </select>
                 <p class="erro" id="erro-status"></p>
             </div>
@@ -138,7 +139,7 @@
 
         <!-- Botões de ação -->
         <div class="acoes">
-            <div class="botao-cancelar">Cancelar</div>
+            <button type="button" id="btn-cancelar" class="botao-cancelar">Cancelar</button>
             <button type="submit" class="botao-salvar">Salvar alterações</button>
         </div>
 
@@ -151,6 +152,7 @@
   </div>
 
   <!-- O script fica no final para carregar depois que a página já existe -->
+  <script src="../scripts/autenticacao.js"></script>
   <script src="../scripts/demanda.js"></script>
 </body>
 </html>

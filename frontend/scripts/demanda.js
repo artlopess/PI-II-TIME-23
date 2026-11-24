@@ -10,8 +10,58 @@
    editar-demanda.html?id=1 */
 
 
-/* Endereço do servidor da API */
-const URL_API = "http://localhost:3000";
+/* URL_API, obterToken(), obterUsuario(), exigirLogin() e sair() vêm de
+   autenticacao.js, carregado antes deste arquivo. Assim o token, o nome e o
+   perfil são sempre da mesma sessão — inclusive com "Lembrar-me". */
+
+function podeGerenciar() {
+    const perfil = obterUsuario()?.perfil;
+    return perfil === "Administrador" || perfil === "Líder de Projeto";
+}
+
+/* Ciclo de vida do status (item 2.2.4 do escopo). Espelha a tabela
+   TRANSICOES_PERMITIDAS do backend; a API continua sendo quem decide. */
+const TRANSICOES_PERMITIDAS = {
+    "Aberta": ["Em andamento", "Cancelada"],
+    "Em andamento": ["Em revisão", "Cancelada"],
+    "Em revisão": ["Em andamento", "Concluída", "Cancelada"],
+    "Concluída": [],
+    "Cancelada": []
+};
+
+/* Membro só avança Aberta → Em andamento e Em andamento → Em revisão. */
+const TRANSICOES_MEMBRO = {
+    "Aberta": ["Em andamento"],
+    "Em andamento": ["Em revisão"]
+};
+
+/* Todas as rotas usadas por estas telas exigem login.
+   requisitarApi() reenvia o token da sessão ativa em toda chamada. */
+async function requisitarApi(caminho, opcoes = {}) {
+    const resposta = await fetch(URL_API + caminho, {
+        ...opcoes,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + (obterToken() || ""),
+            ...(opcoes.headers || {})
+        }
+    });
+
+    if (resposta.status === 401) {
+        sair();
+    }
+
+    return resposta;
+}
+
+/* A API pode responder com "mensagem" (rotas de demanda) ou "erro"
+   (autenticação). Este helper evita mostrar "undefined" na tela. */
+function mensagemDaApi(dados, padrao) {
+    if (dados === null || dados === undefined) {
+        return padrao;
+    }
+    return dados.mensagem || dados.erro || padrao;
+}
 
 
 /* ===== FUNÇÕES DE APOIO ===== */
@@ -82,6 +132,101 @@ function pegarIdDaUrl() {
 }
 
 
+/* ===== PERFIL, STATUS E BOTÃO CANCELAR ===== */
+
+/* Esconde o formulário e explica ao usuário por que ele não pode usá-lo. */
+function mostrarAvisoPerfil(mensagem) {
+    const formulario = document.querySelector("form");
+    if (formulario !== null) {
+        formulario.hidden = true;
+    }
+
+    const texto = document.getElementById("texto-aviso-perfil");
+    const aviso = document.getElementById("aviso-perfil");
+
+    if (texto !== null && aviso !== null) {
+        texto.textContent = mensagem;
+        aviso.hidden = false;
+    }
+}
+
+/* Membro não vê formulário de criação/edição; a API também recusa essas ações.
+   O status dele é alterado na tela de detalhes, com opções filtradas. */
+function aplicarPermissoes() {
+    const usuario = obterUsuario();
+
+    if (usuario && usuario.perfil === "Membro da Equipe") {
+        const mensagem = pegarIdDaUrl() === null
+            ? "Seu perfil não pode criar demandas. Você pode atualizar o status das demandas atribuídas a você na tela de detalhes."
+            : "Seu perfil não pode editar demandas. Para atualizar o status de uma demanda atribuída a você, use a tela de detalhes.";
+
+        mostrarAvisoPerfil(mensagem);
+    }
+}
+
+/* Monta o select de status só com o estado atual e as transições permitidas.
+   O backend valida de novo, mas a tela não oferece uma mudança inválida. */
+function configurarStatus(demanda) {
+    const campo = document.getElementById("status");
+
+    if (campo === null) {
+        return;
+    }
+
+    if (["Concluída", "Cancelada"].includes(demanda.status)) {
+        mostrarAvisoPerfil("Esta demanda já foi encerrada e não pode mais ser alterada.");
+        return;
+    }
+
+    const usuario = obterUsuario();
+    const permitidas = (usuario && usuario.perfil === "Membro da Equipe")
+        ? (TRANSICOES_MEMBRO[demanda.status] || [])
+        : (TRANSICOES_PERMITIDAS[demanda.status] || []);
+
+    campo.innerHTML = "";
+
+    const atual = document.createElement("option");
+    atual.value = demanda.status;
+    atual.textContent = demanda.status + " (atual)";
+    campo.appendChild(atual);
+
+    for (const nome of permitidas) {
+        const opcao = document.createElement("option");
+        opcao.value = nome;
+        opcao.textContent = nome;
+        campo.appendChild(opcao);
+    }
+
+    campo.value = demanda.status;
+}
+
+/* O botão Cancelar era um <div> sem ação. Agora pede confirmação e volta
+   para a página anterior (com fallback para a listagem). */
+function configurarBotaoCancelar() {
+    const botao = document.getElementById("btn-cancelar");
+
+    if (botao === null) {
+        return;
+    }
+
+    botao.addEventListener("click", function () {
+        const mensagem = pegarIdDaUrl() === null
+            ? "Descartar o cadastro e voltar?"
+            : "Descartar as alterações e voltar?";
+
+        if (window.confirm(mensagem) === false) {
+            return;
+        }
+
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            window.location.href = "listagem.html";
+        }
+    });
+}
+
+
 /* ===== CARREGAR DADOS DA API ===== */
 
 /* Preenche o campo Projeto com os projetos que vêm de GET /projetos.
@@ -91,7 +236,7 @@ async function carregarProjetos() {
     const campo = document.getElementById("projeto");
 
     try {
-        const resposta = await fetch(URL_API + "/projetos");
+        const resposta = await requisitarApi("/projetos");
 
         if (resposta.ok === false) {
             throw new Error("A API respondeu " + resposta.status);
@@ -116,25 +261,36 @@ async function carregarProjetos() {
 }
 
 /* Preenche o campo Responsável com os usuários de GET /usuarios.
-
-   Essa rota é de outro integrante. Enquanto ela não existir, a função
-   mantém a lista que já está no HTML e não mostra erro ao usuário,
-   para a tela continuar utilizável. */
+   A API devolve um ARRAY de usuários (e exige perfil Admin ou Líder);
+   antes o código procurava dados.usuarios, então o select ficava vazio. */
 async function carregarResponsaveis() {
+    /* GET /usuarios exige Admin ou Líder; Membro não faz essa chamada. */
+    if (podeGerenciar() === false) {
+        return;
+    }
+
     const campo = document.getElementById("responsavel");
 
     try {
-        const resposta = await fetch(URL_API + "/usuarios");
+        const resposta = await requisitarApi("/usuarios");
+        const dados = await resposta.json().catch(() => null);
 
         if (resposta.ok === false) {
+            mostrarAviso(mensagemDaApi(
+                dados,
+                "Seu perfil não pode escolher responsáveis."
+            ));
             return;
         }
 
-        const dados = await resposta.json();
+        /* Aceita tanto o array atual quanto um eventual { usuarios: [...] }. */
+        const usuarios = Array.isArray(dados)
+            ? dados
+            : (dados && Array.isArray(dados.usuarios) ? dados.usuarios : []);
 
-        campo.innerHTML = '<option value="">Sem responsável por enquanto</option>';
+        campo.innerHTML = '<option value="">Sem responsável</option>';
 
-        for (const usuario of dados.usuarios) {
+        for (const usuario of usuarios) {
             const opcao = document.createElement("option");
             opcao.value = usuario.id;
             opcao.textContent = usuario.nome;
@@ -142,41 +298,43 @@ async function carregarResponsaveis() {
         }
 
     } catch (erro) {
-        /* Rota ainda não disponível: mantém a lista do HTML */
-        console.log("GET /usuarios ainda não disponível.");
+        mostrarAviso("Não foi possível carregar os responsáveis. Confira se o servidor está rodando em " + URL_API + ".");
     }
 }
 
 /* Na tela de edição, busca a demanda em GET /demandas/:id e preenche os campos.
-
-   Essa rota também é de outro integrante. Enquanto ela não existir, a tela
-   mantém os valores de exemplo do HTML, para ser possível testar o PUT. */
+   A API devolve o objeto da demanda diretamente — antes o código lia
+   dados.demanda, então o formulário não era preenchido. */
 async function carregarDemanda(id) {
     try {
-        const resposta = await fetch(URL_API + "/demandas/" + id);
+        const resposta = await requisitarApi("/demandas/" + id);
+        const dados = await resposta.json().catch(() => null);
 
         if (resposta.ok === false) {
-            mostrarAviso("Não foi possível carregar os dados desta demanda. Preencha os campos antes de salvar.");
-            console.log("GET /demandas/" + id + " respondeu " + resposta.status);
+            mostrarAviso(mensagemDaApi(
+                dados,
+                "Não foi possível carregar os dados desta demanda."
+            ));
             return;
         }
 
-        const dados = await resposta.json();
-        const demanda = dados.demanda;
+        const demanda = (dados && dados.demanda) ? dados.demanda : dados;
 
-        document.getElementById("titulo").value = demanda.titulo;
-        document.getElementById("descricao").value = demanda.descricao;
-        document.getElementById("tipo").value = demanda.tipo;
-        document.getElementById("prioridade").value = demanda.prioridade;
-        document.getElementById("projeto").value = demanda.projetoId;
-        document.getElementById("responsavel").value = demanda.responsavelId || "";
-        document.getElementById("prazo").value = demanda.prazo || "";
-        document.getElementById("status").value = demanda.status;
+        document.getElementById("titulo").value = demanda.titulo ?? "";
+        document.getElementById("descricao").value = demanda.descricao ?? "";
+        document.getElementById("tipo").value = demanda.tipo ?? "";
+        document.getElementById("prioridade").value = demanda.prioridade ?? "";
+        document.getElementById("projeto").value = demanda.projetoId ?? "";
+        document.getElementById("responsavel").value = demanda.responsavelId ?? "";
+        document.getElementById("prazo").value = demanda.prazo ?? "";
+
+        // O status foi preenchido por configurarStatus() com as opções válidas.
+        configurarStatus(demanda);
 
         mostrarDatas(demanda);
 
     } catch (erro) {
-        console.log("GET /demandas/:id ainda não disponível.");
+        mostrarAviso("Não foi possível carregar a demanda. Confira se o servidor está rodando em " + URL_API + ".");
     }
 }
 
@@ -188,6 +346,21 @@ async function carregarDemanda(id) {
 window.addEventListener("load", iniciarTela);
 
 async function iniciarTela() {
+    /* Tela protegida: sem token, volta para o login antes de qualquer chamada. */
+    exigirLogin();
+
+    if (obterToken() === null) {
+        return;
+    }
+
+    aplicarPermissoes();
+    configurarBotaoCancelar();
+
+    /* Membro não usa o formulário: a tela mostra só o aviso de perfil. */
+    if (podeGerenciar() === false) {
+        return;
+    }
+
     /* O await faz uma coisa esperar a outra terminar */
     await carregarProjetos();
     await carregarResponsaveis();
@@ -341,30 +514,31 @@ async function enviarParaApi() {
     const demanda = montarDemanda();
 
     /* Cadastro: POST /demandas. Edição: PUT /demandas/:id */
-    let endereco = URL_API + "/demandas";
+    let caminho = "/demandas";
     let metodo = "POST";
 
     if (id !== null) {
-        endereco = URL_API + "/demandas/" + id;
+        caminho = "/demandas/" + id;
         metodo = "PUT";
     }
 
     try {
-        const resposta = await fetch(endereco, {
+        const resposta = await requisitarApi(caminho, {
             method: metodo,
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(demanda)
         });
 
-        const dados = await resposta.json();
+        const dados = await resposta.json().catch(() => null);
 
         /* 201 (criado) e 200 (alterado) são as respostas de sucesso */
-        if (resposta.status === 201 || resposta.status === 200) {
-            mostrarSucesso(dados.mensagem);
+        if (resposta.ok) {
+            mostrarSucesso(mensagemDaApi(dados, "Demanda salva com sucesso."));
 
             /* A data de última atualização muda a cada alteração salva,
                e quem define o valor é o servidor (item 2.2.8 do escopo). */
-            mostrarDatas(dados.demanda);
+            if (dados) {
+                mostrarDatas(dados.demanda || dados);
+            }
 
             /* Depois de cadastrar, limpa o formulário para o próximo cadastro */
             if (metodo === "POST") {
@@ -375,10 +549,12 @@ async function enviarParaApi() {
         }
 
         /* A API recusou. Mostra os erros que ela devolveu, um embaixo do outro. */
-        if (dados.erros !== undefined) {
-            mostrarAviso(dados.mensagem + " " + dados.erros.join(" "));
+        const mensagem = mensagemDaApi(dados, "Não foi possível salvar a demanda.");
+
+        if (dados && Array.isArray(dados.erros)) {
+            mostrarAviso(mensagem + " " + dados.erros.join(" "));
         } else {
-            mostrarAviso(dados.mensagem);
+            mostrarAviso(mensagem);
         }
 
     } catch (erro) {
@@ -393,6 +569,13 @@ async function enviarParaApi() {
 /* Esta função é chamada pelo onsubmit do formulário.
    Primeiro valida na tela, depois envia para a API. */
 function enviarFormulario() {
+
+    /* A sessão pode ter expirado enquanto a página estava aberta. */
+    exigirLogin();
+
+    if (obterToken() === null) {
+        return false;
+    }
 
     /* Limpa as mensagens da tentativa anterior */
     document.getElementById("aviso-api").textContent = "";

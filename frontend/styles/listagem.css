@@ -1,22 +1,36 @@
+/* Autor: Pedro Osti - Estilos da listagem de demandas conectada à API */
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-  padding: 30px;
+  padding: 24px;
   font-family: 'Inter', sans-serif;
   background: #f2f2f2;
+  color: #000;
 }
 
-.card, .filtros, table {
-  background: white;
-  border: 1px solid #000;
-  border-radius: 10px;
+[hidden] {
+  display: none !important;
 }
 
-.card {
+.pagina {
   width: 100%;
-  max-width: 360px;
-  padding: 36px 32px;
-  margin: auto;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== TOPO ===== */
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .logo {
@@ -28,12 +42,13 @@ body {
 .logo-quadrado {
   width: 30px;
   height: 30px;
-  background: rgb(59,59,163);
+  background: rgb(59, 59, 163);
   color: white;
   border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 700;
 }
 
 .logo-nome {
@@ -42,62 +57,297 @@ body {
 }
 
 h1 {
-  color: #000;
   font-size: 24px;
+  margin: 0 0 4px;
 }
 
 h2 {
-  color: #333;
+  font-size: 18px;
+  margin: 0;
 }
 
-.campo {
-  margin-bottom: 16px;
+.saudacao {
+  margin: 0;
+  font-size: 13px;
+  color: #555;
 }
 
-input, select {
-  padding: 10px;
-  margin-right: 10px;
+.topo-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ===== BOTÕES E AVISOS ===== */
+.botao-primario,
+.botao-secundario {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 6px;
   font-family: 'Inter', sans-serif;
-  border: 1px solid #000;
-  border-radius: 6px;
-}
-
-button, .botao-entrar {
-  padding: 11px 15px;
-  background: rgb(59,59,163);
-  color: white;
-  border: none;
-  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
   cursor: pointer;
 }
 
-.filtros {
+.botao-primario {
+  background: rgb(59, 59, 163);
+  color: white;
+  border: 1px solid rgb(59, 59, 163);
+}
+
+.botao-secundario {
+  background: white;
+  color: rgb(59, 59, 163);
+  border: 1px solid rgb(59, 59, 163);
+}
+
+.aviso-carregando,
+.mensagem-erro {
+  font-size: 14px;
+  margin: 0 0 14px;
+}
+
+.mensagem-erro {
+  background: #fdecea;
+  border: 1px solid #c0392b;
+  color: #c0392b;
+  border-radius: 6px;
+  padding: 10px 14px;
+}
+
+.mensagem-erro:empty {
+  display: none;
+}
+
+/* ===== FILTROS ===== */
+.card-lista {
+  background: white;
+  border: 1px solid #000;
+  border-radius: 10px;
   padding: 20px;
-  margin-bottom: 20px;
+}
+
+.filtros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.filtros label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+}
+
+.filtros input,
+.filtros select {
+  width: 100%;
+  padding: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  border: 1px solid #000;
+  border-radius: 6px;
+  color: #000;
+  background: white;
+}
+
+.filtros-acoes {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.cabecalho-tabela {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.badge {
+  min-width: 26px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #eee;
+  color: #333;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ===== TABELA ===== */
+.tabela-wrap {
+  width: 100%;
+  overflow-x: auto;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 980px;
 }
 
 th {
-  background: rgb(59,59,163);
+  background: rgb(59, 59, 163);
   color: white;
   padding: 12px;
+  text-align: left;
+  font-size: 13px;
 }
 
 td {
   padding: 12px;
-  border: 1px solid #000;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  vertical-align: top;
 }
 
 tr:hover {
-  background: #eeeeee;
+  background: #f7f7fb;
+}
+
+.col-titulo {
+  min-width: 260px;
+}
+
+.col-titulo a {
+  color: rgb(59, 59, 163);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.col-titulo a:hover {
+  text-decoration: underline;
+}
+
+.acoes {
+  white-space: nowrap;
+}
+
+.link-acao {
+  color: rgb(59, 59, 163);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.link-acao + .link-acao::before {
+  content: " · ";
+  color: #999;
+}
+
+.vazio {
+  padding: 24px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Só aparece no celular, onde a tabela rola horizontalmente */
+.dica-tabela {
+  display: none;
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Destaque leve para prioridade e status, sem depender de ícones */
+.prioridade-critica,
+.prioridade-alta {
+  color: #b3261e;
+  font-weight: 600;
+}
+
+.status-concluida {
+  color: #1b7a3d;
+  font-weight: 600;
+}
+
+.status-cancelada {
+  color: #777;
+  font-weight: 600;
 }
 
 .rodape {
   margin-top: 22px;
   text-align: center;
   font-size: 12px;
+  color: #666;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 900px) {
+  .filtros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 12px;
+  }
+
+  .topo {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .topo-acoes {
+    width: 100%;
+  }
+
+  .topo-acoes a {
+    flex: 1 1 110px;
+    text-align: center;
+  }
+
+  .card-lista {
+    padding: 14px;
+  }
+
+  .filtros {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  /* 16px evita o zoom automático do iOS ao focar um campo */
+  .filtros input,
+  .filtros select {
+    font-size: 16px;
+  }
+
+  .filtros-acoes {
+    width: 100%;
+  }
+
+  .filtros-acoes button {
+    flex: 1;
+  }
+
+  .cabecalho-tabela {
+    justify-content: space-between;
+  }
+
+  .dica-tabela {
+    display: block;
+  }
+
+  /* Mantém as colunas legíveis: o container faz o scroll horizontal. */
+  table {
+    min-width: 820px;
+  }
+
+  th,
+  td {
+    padding: 9px;
+  }
+
+  .rodape {
+    line-height: 1.5;
+  }
 }

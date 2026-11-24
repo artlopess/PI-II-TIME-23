@@ -147,12 +147,10 @@ async function enviarLogin(email, senha) {
     }
 
     // 4. Login ok: guarda o token e o usuário no navegador.
-    //    "Lembrar-me" marcado -> localStorage (continua após fechar o navegador)
-    //    "Lembrar-me" desmarcado -> sessionStorage (some ao fechar a aba)
-    const lembrar = document.getElementById('lembrar').checked;
-    const armazenamento = lembrar ? localStorage : sessionStorage;
-    armazenamento.setItem('token', dados.token);
-    armazenamento.setItem('usuario', JSON.stringify(dados.usuario));
+    //    guardarSessao() (autenticacao.js) usa localStorage quando "Lembrar-me"
+    //    está marcado e sessionStorage quando não está, apagando a sessão
+    //    antiga do outro lugar para evitar usuário/token divergentes.
+    guardarSessao(dados.token, dados.usuario, document.getElementById('lembrar').checked);
 
     // 5. Vai para a próxima tela
     window.location.href = 'dashboard.html';

@@ -1,116 +1,192 @@
-<!-- Gabriel Augusto Jorge-->
-
+<!-- Gabriel Augusto Jorge - Tela Inicial (Dashboard) do Fluxo -->
 <!DOCTYPE html>
-
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard-Fluxo</title>
+    <title>Dashboard - Fluxo</title>
     <link rel="stylesheet" href="../styles/dashboard.css">
 </head>
 <body>
-  <div class="sidebar">
 
-    <div class="logo">
-      <div class="logo-quadrado">F</div>
-      <div class="logo-nome">Fluxo</div>
-    </div>
-
-    <nav>
-      <a class="active" href="dashboard.html">Dashboard</a>
-      <a href="#">Demandas</a>
-      <a href="#">Projetos</a>
-      <a href="#">Usuários</a>
-    </nav>
-
-  </div>
-
-  <div class="dashboard">
-
-    <h2>Dashboard</h2>
-
-    <!-- Mensagem de erro da API (fica escondida enquanto estiver vazia) -->
-    <p id="mensagem-erro" class="erro-api"></p>
-
-    <!-- Indicadores por status: cada número tem um id para o JavaScript preencher -->
-    <div class="dashboard-kpis">
-      <div class="infos">Total<hr><span id="kpi-total">-</span></div>
-      <div class="infos">Abertas<hr><span id="kpi-aberta">-</span></div>
-      <div class="infos">Em andamento<hr><span id="kpi-andamento">-</span></div>
-      <div class="infos">Em revisão<hr><span id="kpi-revisao">-</span></div>
-      <div class="infos">Concluídas<hr><span id="kpi-concluida">-</span></div>
-      <div class="infos">Canceladas<hr><span id="kpi-cancelada">-</span></div>
-    </div>
-    <br><br>
-
-    <div class="linha-card">
-      <!-- Quantidade por prioridade -->
-      <div class="prioridade">
-        <p>Por Prioridade</p>
-        <div class="row">
-          <span class="prioridade-label critica">Crítica</span>
-          <div class="values" id="prio-critica">-</div>
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-quadrado">F</div>
+            <div class="logo-nome">Fluxo</div>
         </div>
-        <hr>
-        <div class="row">
-          <span class="prioridade-label alta">Alta</span>
-          <div class="values" id="prio-alta">-</div>
-        </div>
-        <hr>
-        <div class="row">
-          <span class="prioridade-label media">Média</span>
-          <div class="values" id="prio-media">-</div>
-        </div>
-        <hr>
-        <div class="row">
-          <span class="prioridade-label baixa">Baixa</span>
-          <div class="values" id="prio-baixa">-</div>
-        </div>
-      </div>
 
-      <!-- Quantidade por tipo -->
-      <div class="tipos">
-        <p>Por tipos</p>
-        <div class="row">
-          <span>Tarefas</span>
-          <div class="values" id="tipo-tarefa">-</div>
-        </div>
-        <hr>
-        <div class="row">
-          <span>Defeito</span>
-          <div class="values" id="tipo-defeito">-</div>
-        </div>
-        <hr>
-        <div class="row">
-          <span>Melhoria</span>
-          <div class="values" id="tipo-melhoria">-</div>
-        </div>
-        <hr>
-        <div class="row">
-          <span>Documentação</span>
-          <div class="values" id="tipo-documentacao">-</div>
-        </div>
-      </div>
-    </div>
-    <br><br>
+        <nav aria-label="Navegação principal">
+            <a class="active" href="dashboard.html" aria-current="page">Visão geral</a>
+            <a href="listagem.html">Demandas</a>
+            <a id="link-nova-demanda" href="cadastro-demanda.html" hidden>Nova demanda</a>
+        </nav>
 
-    <!-- Listas de atenção: o JavaScript cria uma linha para cada demanda -->
-    <div class="prox">
-      <p>Críticas em aberto</p>
-      <div id="lista-criticas">
-        <div class="values">Carregando...</div>
-      </div>
-      <hr>
-      <p>Próximas do prazo</p>
-      <div id="lista-prazo">
-        <div class="values">Carregando...</div>
-      </div>
-    </div>
+        <div class="sidebar-foot">
+            <span id="sidebar-usuario">—</span>
+            <a id="botao-sair" href="#">Sair</a>
+        </div>
+    </aside>
 
-  </div>
+    <main class="dashboard">
 
-  <!-- Script que busca os dados na API e preenche a tela -->
-  <script src="../scripts/dashboard.js"></script>
+        <header class="topo">
+            <div>
+                <h1>Dashboard</h1>
+                <p id="saudacao" class="subtitulo">Carregando usuário...</p>
+            </div>
+            <div class="topo-acoes">
+                <span id="ultima-atualizacao" class="atualizado" aria-live="polite"></span>
+                <button id="btn-atualizar" type="button" class="botao-secundario">Atualizar</button>
+                <a id="btn-nova-demanda" class="botao-primario" href="cadastro-demanda.html" hidden>Nova demanda</a>
+            </div>
+        </header>
+
+        <div id="carregando" class="aviso-carregando" role="status" hidden>Carregando dados...</div>
+        <p id="mensagem-erro" class="erro-api" role="alert"></p>
+
+        <section aria-labelledby="titulo-kpis">
+            <h2 id="titulo-kpis" class="section-title">Indicadores</h2>
+            <div id="kpis" class="dashboard-kpis"></div>
+        </section>
+
+        <section class="linha-card" aria-label="Distribuição das demandas">
+            <div class="card">
+                <h2>Por prioridade</h2>
+                <div id="distribuicao-prioridade" class="distribuicao"></div>
+            </div>
+            <div class="card">
+                <h2>Por tipo</h2>
+                <div id="distribuicao-tipo" class="distribuicao"></div>
+            </div>
+        </section>
+
+        <section class="linha-card" aria-label="Demandas que exigem atenção">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Críticas em aberto</h2>
+                    <span id="total-criticas" class="badge badge-atencao">0</span>
+                </div>
+                <div id="lista-criticas" class="lista-atencao"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Próximas do prazo</h2>
+                    <span id="total-prazo" class="badge badge-atencao">0</span>
+                    <label class="periodo">Janela:
+                        <select id="dias" aria-label="Janela de dias para prazos">
+                            <option value="0">Hoje</option>
+                            <option value="3">3 dias</option>
+                            <option value="7" selected>7 dias</option>
+                            <option value="15">15 dias</option>
+                            <option value="30">30 dias</option>
+                        </select>
+                    </label>
+                </div>
+                <div id="lista-prazo" class="lista-atencao"></div>
+            </div>
+        </section>
+
+        <section class="card card-tabela" aria-labelledby="titulo-tabela">
+            <div class="card-header">
+                <h2 id="titulo-tabela">Demandas</h2>
+                <span id="total-demandas" class="badge">0</span>
+            </div>
+
+            <form id="form-filtros" class="filtros">
+                <label>Status
+                    <select name="status">
+                        <option value="">Todos</option>
+                        <option value="Aberta">Aberta</option>
+                        <option value="Em andamento">Em andamento</option>
+                        <option value="Em revisão">Em revisão</option>
+                        <option value="Concluída">Concluída</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                </label>
+
+                <label>Prioridade
+                    <select name="prioridade">
+                        <option value="">Todas</option>
+                        <option value="Crítica">Crítica</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Média">Média</option>
+                        <option value="Baixa">Baixa</option>
+                    </select>
+                </label>
+
+                <label>Tipo
+                    <select name="tipo">
+                        <option value="">Todos</option>
+                        <option value="Tarefa">Tarefa</option>
+                        <option value="Defeito">Defeito</option>
+                        <option value="Melhoria">Melhoria</option>
+                        <option value="Documentação">Documentação</option>
+                    </select>
+                </label>
+
+                <label>Projeto
+                    <select name="projeto" id="filtro-projeto">
+                        <option value="">Todos</option>
+                    </select>
+                </label>
+
+                <label id="campo-responsavel">Responsável
+                    <select name="responsavel" id="filtro-responsavel">
+                        <option value="">Todos</option>
+                    </select>
+                </label>
+
+                <label class="campo-busca">Busca
+                    <input name="busca" type="search" placeholder="Título ou descrição">
+                </label>
+
+                <label>Ordenar por
+                    <select name="ordenarPor">
+                        <option value="dataCriacao">Data de criação</option>
+                        <option value="prioridade">Prioridade</option>
+                        <option value="prazo">Prazo</option>
+                        <option value="status">Status</option>
+                    </select>
+                </label>
+
+                <label>Direção
+                    <select name="direcao">
+                        <option value="asc">Crescente</option>
+                        <option value="desc">Decrescente</option>
+                    </select>
+                </label>
+
+                <div class="filtros-acoes">
+                    <button type="submit" class="botao-primario">Filtrar</button>
+                    <button type="button" id="btn-limpar" class="botao-secundario">Limpar</button>
+                </div>
+            </form>
+
+            <div class="tabela-wrap">
+                <table id="tabela-demandas">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Tipo</th>
+                            <th>Prioridade</th>
+                            <th>Status</th>
+                            <th>Projeto</th>
+                            <th>Responsável</th>
+                            <th>Prazo</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela"></tbody>
+                </table>
+                <p id="tabela-vazia" class="vazio" hidden>Nenhuma demanda encontrada para os filtros selecionados.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- autenticacao.js fornece token, usuário, chamarApi() e sair() -->
+    <script src="../scripts/autenticacao.js"></script>
+    <script src="../scripts/dashboard.js"></script>
 </body>
 </html>

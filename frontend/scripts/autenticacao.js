@@ -3,15 +3,71 @@
 // Endereço onde o backend está rodando
 const URL_API = 'http://localhost:3000';
 
-// Procura o token nos dois lugares possíveis (Lembrar-me usa localStorage)
-function obterToken() {
-  return localStorage.getItem('token') || sessionStorage.getItem('token');
+// Escolhe o armazenamento da sessão ativa.
+// "Lembrar-me" usa localStorage; sem ele, sessionStorage. Se sobraram dados nos
+// dois (login antigo), prevalece o mais recente — ou a sessão atual, em fallback.
+function armazenamentoDaSessao() {
+  const temSessao = !!sessionStorage.getItem('token');
+  const temLocal = !!localStorage.getItem('token');
+
+  if (!temSessao && !temLocal) {
+    return null;
+  }
+  if (!temSessao) {
+    return localStorage;
+  }
+  if (!temLocal) {
+    return sessionStorage;
+  }
+
+  const vezSessao = Number(sessionStorage.getItem('sessaoAtualizadaEm') || 0);
+  const vezLocal = Number(localStorage.getItem('sessaoAtualizadaEm') || 0);
+
+  if (vezSessao !== vezLocal) {
+    return vezSessao > vezLocal ? sessionStorage : localStorage;
+  }
+  return sessionStorage;
 }
 
-// Devolve o usuário logado { id, nome, email, perfil } ou null
+// Grava token e usuário no lugar correto e apaga a sessão concorrente.
+// Isso evita que um login antigo com "Lembrar-me" sobrescreva o login atual.
+function guardarSessao(token, usuario, lembrar) {
+  const destino = lembrar ? localStorage : sessionStorage;
+  const outro = lembrar ? sessionStorage : localStorage;
+
+  outro.removeItem('token');
+  outro.removeItem('usuario');
+  outro.removeItem('sessaoAtualizadaEm');
+
+  destino.setItem('token', token);
+  destino.setItem('usuario', JSON.stringify(usuario));
+  destino.setItem('sessaoAtualizadaEm', String(Date.now()));
+}
+
+// Procura o token no armazenamento da sessão ativa
+function obterToken() {
+  const armazenamento = armazenamentoDaSessao();
+  return armazenamento ? armazenamento.getItem('token') : null;
+}
+
+// Devolve o usuário logado { id, nome, email, perfil } ou null.
+// Lê do MESMO armazenamento do token para nome e permissões nunca divergirem.
 function obterUsuario() {
-  const texto = localStorage.getItem('usuario') || sessionStorage.getItem('usuario');
-  return texto ? JSON.parse(texto) : null;
+  const armazenamento = armazenamentoDaSessao();
+  if (!armazenamento) {
+    return null;
+  }
+
+  const texto = armazenamento.getItem('usuario');
+  if (!texto) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(texto);
+  } catch {
+    return null;
+  }
 }
 
 // Se não houver token, volta para o login
@@ -23,10 +79,11 @@ function exigirLogin() {
 
 // Apaga os dados da sessão e volta para o login
 function sair() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('usuario');
-  sessionStorage.removeItem('token');
-  sessionStorage.removeItem('usuario');
+  for (const armazenamento of [localStorage, sessionStorage]) {
+    armazenamento.removeItem('token');
+    armazenamento.removeItem('usuario');
+    armazenamento.removeItem('sessaoAtualizadaEm');
+  }
   window.location.href = 'login.html';
 }
 
@@ -38,7 +95,7 @@ async function chamarApi(caminho, opcoes = {}) {
     ...opcoes,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + obterToken(),
+      'Authorization': 'Bearer ' + (obterToken() || ''),
       ...(opcoes.headers || {})
     }
   });
